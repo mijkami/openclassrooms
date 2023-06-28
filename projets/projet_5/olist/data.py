@@ -41,9 +41,11 @@ class Olist:
         orders = data["orders"][["customer_id", "order_id"]]
         reviews = data["order_reviews"][["order_id", "review_id"]]
         items = data["order_items"][["order_id", "product_id", "seller_id"]]
+        customers = data['customers'][['customer_id', 'customer_unique_id']]
 
         # Merge DataFrame
         matching_table = orders\
+        .merge(customers, on='customer_id', how='outer')\
         .merge(reviews, on="order_id", how="outer")\
         .merge(items, on="order_id", how="outer")
 
