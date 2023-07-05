@@ -23,12 +23,27 @@ def heatmap_num(df):
     sns.set(font_scale=1)
 
 
+def all_heatmaps(df):
+    '''
+    Plotting heatmap
+        using all methods for all numerical variables 
+        (pearson, kendall, spearman)
+    '''
+    numerical = df.select_dtypes(include=['int64','float64','Int64'])[:]
+    plt.figure(figsize=(36,6), dpi=140)
+    for j,i in enumerate(['pearson','kendall','spearman']):
+        plt.subplot(1,3,j+1)
+        correlation = numerical.dropna().corr(method=i)
+        sns.heatmap(correlation, linewidth = 2)
+        plt.title(i, fontsize=18)
+
+
 def dendrogram(df):
     from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
     from scipy.spatial.distance import squareform
 
     corr = df.corr()
-    num_cols = df.columns[df.dtypes == 'float64']
+    num_cols = df.select_dtypes(include=['int64','float64','Int64'])[:].columns
 
     plt.figure(figsize=(12,5))
     dissimilarity = 1 - abs(corr)
@@ -39,6 +54,20 @@ def dendrogram(df):
             orientation='top', 
             leaf_rotation=90
             );
+
+
+def num_corr(df):
+    num_cols = df.select_dtypes(include=['int64','float64','Int64'])[:].columns
+    correlation = num_cols.dropna().corr()
+    correlation
+
+
+def pairplot(df, width=10, height=10):
+    num_cols = df.select_dtypes(include=['int64','float64','Int64'])[:].columns
+    plt.figure(dpi=150)
+    g = sns.pairplot(df[num_cols])
+    g.fig.set_size_inches(width,height)
+    plt.show()
 
 def ping():
     """
