@@ -9,7 +9,7 @@ warnings.filterwarnings('ignore')
 pd.options.mode.chained_assignment = None  # default='warn'
 
 
-def UVA_category(data, var_group_list, width=7, height=5):
+def category(data, var_group_list, width=7, height=5):
   '''
   Univariate_Analysis_categorical
   takes a group of variables (category) and plot/print all the value_counts and barplot.
@@ -30,7 +30,8 @@ def UVA_category(data, var_group_list, width=7, height=5):
     plt.ylabel('{}'.format(i), fontsize = 20)
     plt.title('n_uniques = {} \n value counts \n {};'.format(n_uni,norm_count))
 
-def UVA_numeric2(data, i):
+
+def numeric(data, i):
     '''
     Univariate_Analysis_numeric
     Takes a group of variables (INTEGER and FLOAT) and plot/print 
@@ -68,7 +69,7 @@ def UVA_numeric2(data, i):
                 round(median,2)))
 
 
-def UVA_num_plus(df, indicators_list):
+def num_plus(df, indicators_list):
     for i in indicators_list:
         plt.figure(figsize = (15, 20))
         df_indic = df[i]
@@ -78,21 +79,7 @@ def UVA_num_plus(df, indicators_list):
         plt.xlabel(f'{i}', fontsize = 20)
 
         plt.subplot(5,2,2)
-        UVA_numeric2(df, i)
-
-
-def heatmap_num(df):
-    plt.figure(figsize=(8,8))
-    sns.set(font_scale=1.5)
-    plt.title('Matrice de corrélation de Pearson entre les variables numériques')
-
-    corr = df.corr()
-    mask = np.zeros_like(corr, dtype=np.bool_)
-    mask[np.triu_indices_from(mask)] = True 
-
-    ax = sns.heatmap(corr, mask=mask, vmin=-1, cmap='coolwarm')
-    plt.show()
-    sns.set(font_scale=1)
+        numeric(df, i)
 
 
 def ping():
