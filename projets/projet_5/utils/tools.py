@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -8,6 +7,28 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings('ignore')
 pd.options.mode.chained_assignment = None  # default='warn'
+
+
+def UVA_category(data, var_group_list, width=7, height=5):
+  '''
+  Univariate_Analysis_categorical
+  takes a group of variables (category) and plot/print all the value_counts and barplot.
+  '''
+  # setting figure_size
+  size = len(var_group_list)
+  plt.figure(figsize = (width*size, height), dpi = 100)
+
+  # for every variable
+  for j,i in enumerate(var_group_list):
+    norm_count = data[i].value_counts(normalize = True)
+    n_uni = data[i].nunique()
+
+  #Plotting the variable with every information
+    plt.subplot(1,size,j+1)
+    sns.barplot(norm_count, norm_count.index , order = norm_count.index)
+    plt.xlabel('fraction/percent', fontsize = 20)
+    plt.ylabel('{}'.format(i), fontsize = 20)
+    plt.title('n_uniques = {} \n value counts \n {};'.format(n_uni,norm_count))
 
 def UVA_numeric2(data, i):
     '''
