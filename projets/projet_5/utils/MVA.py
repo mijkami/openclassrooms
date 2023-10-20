@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
+from scipy.spatial.distance import squareform
 #%matplotlib inline
 
 import warnings
@@ -42,15 +44,13 @@ def dendrogram(df):
     '''
     Plots a dendrogram from correlation matrix.
     '''
-    from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
-    from scipy.spatial.distance import squareform
 
     corr = df.corr()
     num_cols = df.select_dtypes(include=['int64','float64','Int64'])[:].columns
 
     plt.figure(figsize=(12,5))
     dissimilarity = 1 - abs(corr)
-    Z = linkage(squareform(dissimilarity), 'complete')
+    Z = linkage(squareform(dissimilarity), 'complete', method='ward')
 
     dendrogram(Z, 
             labels=num_cols, 
