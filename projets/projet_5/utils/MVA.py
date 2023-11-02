@@ -50,7 +50,9 @@ def dendrogram(df):
 
     plt.figure(figsize=(12,5))
     dissimilarity = 1 - abs(corr)
-    Z = linkage(squareform(dissimilarity), 'complete', method='ward')
+    Z = linkage(squareform(dissimilarity), 
+                #'complete', 
+                method='ward')
 
     dendrogram(Z, 
             labels=num_cols, 
