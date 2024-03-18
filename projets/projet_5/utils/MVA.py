@@ -83,8 +83,8 @@ def dendrogram(df):
     '''
     Plots a dendrogram from correlation matrix.
     '''
-    corr = df.corr()
-    num_cols = df.select_dtypes(include=['int64','float64','Int64'])[:].columns
+    num_cols = df.select_dtypes(include=['int64','float64','Int64', 'int32'])[:].columns.tolist()
+    corr = df[num_cols].corr()
 
     plt.figure(figsize=(12,5))
     dissimilarity = 1 - abs(corr)    
@@ -92,7 +92,11 @@ def dendrogram(df):
     #Z = linkage(squareform(dissimilarity), method='ward')
     Z = linkage(squareform(dissimilarity), 'complete')
 
-    dendrogram(Z, labels=num_cols, orientation='top', leaf_rotation=75)
+    dendrogram(Z, 
+            labels=num_cols, 
+            orientation='top', 
+            leaf_rotation=75
+            )
     plt.suptitle('CHA : Classification Hiérarchique Ascendante', fontsize=26)
     plt.tick_params(labelsize=18)
 
