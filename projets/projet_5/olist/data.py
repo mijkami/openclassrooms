@@ -15,6 +15,7 @@ class Olist:
         # Make extensive use of `import ipdb; ipdb.set_trace()` to investigate what `__file__` variable is really
         # Use os.path library to construct path independent of Unix vs. Windows specificities
 
+
         csv_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data', 'csv'))
         file_names = [x for x in os.listdir(csv_path) if ".csv" in x]
         # file_names_base = file_names

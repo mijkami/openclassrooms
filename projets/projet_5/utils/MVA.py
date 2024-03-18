@@ -79,7 +79,7 @@ def all_heatmaps(df):
         plt.title(i, fontsize=18)
 
 
-def dendrogram(df, ward=False):
+def dendrogram(df):
     '''
     Plots a dendrogram from correlation matrix.
     '''
@@ -89,16 +89,10 @@ def dendrogram(df, ward=False):
     plt.figure(figsize=(12,5))
     dissimilarity = 1 - abs(corr)    
     
-    if ward==True:
-        Z = linkage(squareform(dissimilarity), method='ward')
-    else:
-        Z = linkage(squareform(dissimilarity), 'complete')
+    #Z = linkage(squareform(dissimilarity), method='ward')
+    Z = linkage(squareform(dissimilarity), 'complete')
 
-    dendrogram(Z, 
-            labels=num_cols, 
-            orientation='top', 
-            leaf_rotation=75
-            );
+    dendrogram(Z, labels=num_cols, orientation='top', leaf_rotation=75)
     plt.suptitle('CHA : Classification Hiérarchique Ascendante', fontsize=26)
     plt.tick_params(labelsize=18)
 
