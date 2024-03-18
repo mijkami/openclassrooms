@@ -53,20 +53,26 @@ def numeric(data, i):
     points = mean-st_dev, mean+st_dev
 
     #Plotting the variable with every information
-    sns.kdeplot(data[i], shade=True)
-    sns.lineplot(points, [0,0], color = 'black', label = "std_dev")
-    sns.scatterplot([mini,maxi], [0,0], color = 'orange', label = "min/max")
-    sns.scatterplot([mean], [0], color = 'red', label = "mean")
-    sns.scatterplot([median], [0], color = 'blue', label = "median")
+    sns.kdeplot(data[i]
+                  #, shade=True
+                  , fill=True
+                )
+    max_ax = (sns.kdeplot(data[i].to_numpy()).lines[0].get_xydata())[:, 1].max()
+    y_line = [max_ax/100, max_ax/100]
+    y_point = [max_ax/100]
+    sns.lineplot(x = points, y=y_line, color = 'black', label = "marg_err")
+    sns.scatterplot(x=[mini,maxi], y=y_line, color = 'orange', label = "min/max")
+    sns.scatterplot(x=[mean], y=y_point, color = 'red', label = "mean")
+    sns.scatterplot(x=[median], y=y_point, color = 'blue', label = "median")
     plt.xlabel('{}'.format(i), fontsize = 20)
     plt.ylabel('density')
-    plt.title('std_dev = {}; kurtosis = {};\nskew = {}; range = {}\nmean = {}; median = {}'\
-        .format((round(points[0],2),round(points[1],2)),
-                round(kurt,2),
-                round(skew,2),
-                (round(mini,2),round(maxi,2),round(ran,2)),
-                round(mean,2),
-                round(median,2)))
+    plt.title('margin_error = {}; kurtosis = {};\nskew = {}; range = {}\nmean = {}; median = {}'.format((round(points[0],2),round(points[1],2)),
+                                                                                                   round(kurt,2),
+                                                                                                   round(skew,2),
+                                                                                                   (round(mini,2),round(maxi,2),round(ran,2)),
+                                                                                                   round(mean,2),
+                                                                                                   round(median,2)))
+
 
 
 def num_plus(df, indicators_list):
@@ -75,7 +81,10 @@ def num_plus(df, indicators_list):
         df_indic = df[i]
 
         plt.subplot(5,2,1)
-        sns.boxplot(y=df_indic)
+        sns.boxplot(y=df_indic
+                    , showmeans=True
+                    , meanprops={"marker":"s","markerfacecolor":"white", "markeredgecolor":"green"}
+                   )
         plt.xlabel(f'{i}', fontsize = 20)
 
         plt.subplot(5,2,2)
