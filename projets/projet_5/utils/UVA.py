@@ -25,10 +25,13 @@ def category(data, var_group_list, width=7, height=5):
 
   #Plotting the variable with every information
     plt.subplot(1,size,j+1)
-    sns.barplot(norm_count, norm_count.index , order = norm_count.index)
+    ax = sns.barplot(norm_count, norm_count.index , order = norm_count.index)
     plt.xlabel('fraction/percent', fontsize = 20)
     plt.ylabel('{}'.format(i), fontsize = 20)
-    plt.title('n_uniques = {} \n value counts \n {};'.format(n_uni,norm_count))
+    #plt.title('n_uniques = {} \n value counts \n {};'.format(n_uni,norm_count))
+    plt.title('n_uniques = {}'.format(n_uni))
+    var = ax.bar_label(ax.containers[0], rotation=0, padding=2)
+    plt.show()
 
 
 def numeric(data, i):
