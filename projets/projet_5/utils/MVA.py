@@ -49,6 +49,27 @@ def heatmap_num(df):
     plt.show()
     sns.set(font_scale=1)
 
+def heatmap_num_2(df):
+    f, ax = plt.subplots(figsize=(13, 18))
+    corr_matrix = df.corr()
+    heatmap = sns.heatmap(corr_matrix,
+                        mask = mask,
+                        square = True,
+                        linewidths = .5,
+                        cmap = "coolwarm",
+                        cbar_kws = {'shrink': .4,
+                                    "ticks" : [-1, -.5, 0, 0.5, 1]},
+                        vmin = -1,
+                        vmax = 1,
+                        annot = True,
+                        annot_kws = {"size": 12})
+
+    #add the column names as labels
+    ax.set_yticklabels(corr_matrix.columns, rotation = 0)
+    ax.set_xticklabels(corr_matrix.columns)
+    sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
+    plt.show()
+
 def show_pearson(df, num_cols):
     sns.set_theme(style="white")
     # Compute the correlation matrix
