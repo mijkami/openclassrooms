@@ -18,19 +18,21 @@ def boxplot_nums(df, cols_lists, log=False):
     for i in cols_lists:
         all_lists_len.append(len(i))
     
-    fig, ax  = plt.subplots(1,col_lists_len, gridspec_kw={'width_ratios': all_lists_len})
+    fig, ax  = plt.subplots(1,col_lists_len
+            #, gridspec_kw={'width_ratios': all_lists_len}
+            )
     
     for i in cols_lists:
         if log==True:
             sns.boxplot(data=np.log(df[i]), ax=ax[iter]
                         , showmeans=True
                         , meanprops={"marker":"s","markerfacecolor":"white", "markeredgecolor":"green"}
-                       )
+                       ).set(xlabel=i)
         else:
             sns.boxplot(data=df[i], ax=ax[iter]
                         , showmeans=True
                         , meanprops={"marker":"s","markerfacecolor":"white", "markeredgecolor":"green"}
-                       )
+                       ).set(xlabel=i)
         ax[iter].set_xticklabels(ax[iter].get_xticklabels(),rotation=55)
         iter+=1
     
