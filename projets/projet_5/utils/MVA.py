@@ -54,6 +54,8 @@ def heatmap_num(df):
 def heatmap_num_2(df):
     f, ax = plt.subplots(figsize=(13, 18))
     corr_matrix = df.corr()
+    mask = np.zeros_like(corr_matrix, dtype=np.bool_)
+    mask[np.triu_indices_from(mask)] = True 
     heatmap = sns.heatmap(corr_matrix,
                         mask = mask,
                         square = True,
