@@ -3,6 +3,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
+from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
+from scipy.spatial.distance import squareform
 #%matplotlib inline
 
 import warnings
@@ -128,3 +130,18 @@ def circleOfCorrelations(pc_infos, ebouli):
     plt.xlim((-1,1))
     plt.ylim((-1,1))
     plt.title("Circle of Correlations", fontsize=20, fontweight='bold')
+
+def CHA(df, num_cols):
+    corr = df[num_cols].dropna().corr()
+
+    plt.figure(figsize=(12,5))
+    dissimilarity = 1 - abs(corr)
+    Z = linkage(squareform(dissimilarity), 'complete')
+
+    dendrogram(Z, 
+            labels=num_cols, 
+            orientation='top', 
+            leaf_rotation=75
+            )
+    plt.suptitle('CHA : Classification Hiérarchique Ascendante', fontsize=26)
+    plt.tick_params(labelsize=18)
