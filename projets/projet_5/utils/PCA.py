@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
 from scipy.spatial.distance import squareform
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
 #%matplotlib inline
 
 import warnings
