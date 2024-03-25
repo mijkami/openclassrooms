@@ -27,12 +27,12 @@ def boxplot_nums(df, cols_lists, log=False):
             sns.boxplot(data=np.log(df[i]), ax=ax[iter]
                         , showmeans=True
                         , meanprops={"marker":"s","markerfacecolor":"white", "markeredgecolor":"green"}
-                       ).set(xlabel=i)
+                       ).set(xlabel=i[:11])
         else:
             sns.boxplot(data=df[i], ax=ax[iter]
                         , showmeans=True
                         , meanprops={"marker":"s","markerfacecolor":"white", "markeredgecolor":"green"}
-                       ).set(xlabel=i)
+                       ).set(xlabel=i[:11])
         ax[iter].set_xticklabels(ax[iter].get_xticklabels(),rotation=55)
         iter+=1
     
