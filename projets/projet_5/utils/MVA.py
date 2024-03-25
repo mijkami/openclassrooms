@@ -6,6 +6,9 @@ from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
 from scipy.spatial.distance import squareform
 #%matplotlib inline
 
+import statsmodels.formula.api as smf
+import statsmodels.api as sm
+
 import warnings
 warnings.filterwarnings('ignore')
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -184,6 +187,37 @@ def Bivariate_cont_cat(data, cont, cat, category):
     plt.title('categorical boxplot')
 
 
+def anova_cat(df, var_num, var_cat):
+    anova_category = smf.ols(f'{var_num} ~ {var_cat}', data=df).fit()
+    fisher_df = sm.stats.anova_lm(anova_category, typ=2)
+    print(f"ANOVA {var_num} ~ {var_cat}")
+    print('-' * 85)
+    print(anova_category.summary().tables[0])
+    print("")
+    print("Test de Fisher / Tableau d'analyse de la variance : \n")
+    print(sm.stats.anova_lm(anova_category, typ=2))
+    print('-' * 85)
+    print("")
+    print('R2: ', round(anova_category.rsquared, 3))
+    print(f"p-value: {fisher_df['PR(>F)'].iloc[0]}")
+
+
+def anova_multiple(df, var_num_list, var_cat):
+    dict = {"Anova" :[]
+        ,"R2": []
+        ,"p-value": []
+       }
+
+    for var_num in var_num_list:
+        anova_category = smf.ols(f'{var_num} ~ {var_cat}', data=df).fit()
+        fisher_df = sm.stats.anova_lm(anova_category, typ=2)
+        dict["Anova"].append(f'{var_num} ~ {var_cat}')
+        dict["R2"].append(f'{round(anova_category.rsquared, 3)}')
+        dict["p-value"].append(f"{fisher_df['PR(>F)'].iloc[0]}")
+    
+    anova_df = pd.DataFrame.from_dict(dict)
+    anova_df = anova_df.astype({'R2':'float', 'p-value':'float'})
+    return anova_df.sort_values(by='R2', ascending=False)
 
 def ping():
     """
