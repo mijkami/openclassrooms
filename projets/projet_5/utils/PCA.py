@@ -2,13 +2,49 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
 #%matplotlib inline
 
 import warnings
 warnings.filterwarnings('ignore')
 pd.options.mode.chained_assignment = None  # default='warn'
 
-
+def clean_data(data, select_X=None, impute=False, std=False): 
+    """Returns dataframe with selected, imputed 
+       and standardized features
+    
+    Input
+          data: dataframe
+          select_X: list of feature names to be selected (string)
+          impute: If True impute np.nan with mean
+          std: If True standardize data
+          
+    Return
+        dataframe: data with selected, imputed 
+                   and standardized features    
+    """
+    
+    # (i.) select features
+    if select_X is not None:
+        data = data.filter(select_X, axis='columns')
+        print("\t>>> Selected features: {}".format(select_X))
+    else:
+        # store column names
+        select_X = list(data.columns)
+    
+    # (ii.) impute with mean 
+    if impute:
+        imp = SimpleImputer()
+        data = imp.fit_transform(data)
+        print("\t>>> Imputed missings")
+    
+    # (iii.) standardize 
+    if std:
+        std_scaler = StandardScaler()
+        data = std_scaler.fit_transform(data)
+        print("\t>>> Standardized data")
+    
+    return pd.DataFrame(data, columns=select_X)
 
 def myPCA(df, clusters=None):
     # https://github.com/mazieres/analysis/blob/master/analysis.py#L19-34
@@ -39,7 +75,39 @@ def myPCA(df, clusters=None):
     plt.ylabel("PC-1 (%s%%)" % str(ebouli[1])[:4].lstrip("0."))
     plt.title("PCA")
     plt.show()
-    return pc_infos, ebouli
+
+    # check factor loading matrix
+    df_c = pd.DataFrame(pca.components_, columns=df.columns).T
+
+    # matrix adjust y-axis size dynamically
+    size_yaxis = round(df.shape[1] * 0.5)
+    fig, ax = plt.subplots(figsize=(8,size_yaxis))# plot the first top_pc components
+    top_pc = 3
+    sns.heatmap(df_c.iloc[:,:top_pc], annot=True, cmap="YlGnBu", ax=ax)
+    plt.show()
+
+    # basic info
+    n_components = len(pca.explained_variance_ratio_)
+    explained_variance = pca.explained_variance_ratio_
+    cum_explained_variance = np.cumsum(explained_variance)
+    idx = np.arange(n_components)+1
+    df_explained_variance = pd.DataFrame([explained_variance, cum_explained_variance], 
+                                        index=['explained variance', 'cumulative'], 
+                                        columns=idx).T
+
+    mean_explained_variance = df_explained_variance.iloc[:,0].mean() # calculate mean explained variance# 
+    
+    # Print explained variance as plain text
+    print('Résumé PCA')
+    print('='*40)
+    print("Total: {} composants".format(n_components))
+    print('-'*40)
+    print('Moyenne de la variance expliquée :', round(mean_explained_variance,3))
+    print('-'*40)
+    print(df_explained_variance.head(20))
+    print('-'*40)
+
+    return pc_infos
 
 
 
