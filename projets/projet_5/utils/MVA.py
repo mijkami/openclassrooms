@@ -13,8 +13,8 @@ import warnings
 warnings.filterwarnings('ignore')
 pd.options.mode.chained_assignment = None  # default='warn'
 
-def boxplot_nums(df, cols_lists, log=False):
-    sns.set(rc={'figure.figsize':(11.7,8.27)})
+def boxplot_nums(df, cols_lists, fig_w=11.7, fig_l=8.27, log=False):
+    sns.set(rc={'figure.figsize':(fig_w,fig_l)})
     col_lists_len = len(cols_lists)
     all_lists_len = []
     iter = 0
