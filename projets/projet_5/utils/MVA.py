@@ -13,8 +13,8 @@ import warnings
 warnings.filterwarnings('ignore')
 pd.options.mode.chained_assignment = None  # default='warn'
 
-def boxplot_nums(df, cols_lists, fig_w=11.7, fig_l=8.27, log=False):
-    sns.set(rc={'figure.figsize':(fig_w,fig_l)})
+def boxplot_nums(df, cols_lists, fig_w=11.7, fig_h=8.27, log=False):
+    sns.set(rc={'figure.figsize':(fig_w,fig_h)})
     col_lists_len = len(cols_lists)
     all_lists_len = []
     iter = 0
@@ -36,9 +36,10 @@ def boxplot_nums(df, cols_lists, fig_w=11.7, fig_l=8.27, log=False):
                         , showmeans=True
                         , meanprops={"marker":"s","markerfacecolor":"white", "markeredgecolor":"green"}
                        ).set(xlabel=i[:11])
-        ax[iter].set_xticklabels(ax[iter].get_xticklabels(),rotation=55)
+        #ax[iter].set_xticklabels(ax[iter].get_xticklabels(),rotation=55)
+        ax[iter].tick_params(axis='x', rotation=90)
         iter+=1
-    
+    #plt.xticks(rotation=45)
     plt.show()
 
 def heatmap_num(df):
