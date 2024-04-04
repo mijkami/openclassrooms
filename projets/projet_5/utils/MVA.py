@@ -13,12 +13,14 @@ import warnings
 warnings.filterwarnings('ignore')
 pd.options.mode.chained_assignment = None  # default='warn'
 
-def displayColumnDistribution(_dataset):
-  for i in range(dataset.shape[1]):
-    plt.subplot(4, 4, i+1)
-    plt.title('Column ' + str(i) + ', Var=' + str(np.var(dataset[i])))
-    x = np.arange(dataset.shape[0])
-    plt.bar(x, dataset[i])
+def displayColumnDistribution(df):
+  i=1
+  for col in df.columns:
+    plt.subplot(4, 4, i)
+    plt.title('Column ' + str(col) + ', Var=' + str(np.var(df[col])))
+    x = np.arange(df.shape[0])
+    plt.bar(x, df[col])
+    i+=1
 
 def boxplot_nums(df, cols_lists, fig_w=11.7, fig_h=8.27, log=False):
     sns.set(rc={'figure.figsize':(fig_w,fig_h)})
