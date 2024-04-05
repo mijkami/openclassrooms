@@ -134,7 +134,7 @@ def circleOfCorrelations(pc_infos, ebouli):
     plt.ylim((-1,1))
     plt.title("Circle of Correlations", fontsize=20, fontweight='bold')
 
-def CHA(df, num_cols):
+def CHA(df, num_cols, label_size=15, rotation=90):
     corr = df[num_cols].dropna().corr()
 
     plt.figure(figsize=(12,5))
@@ -144,7 +144,7 @@ def CHA(df, num_cols):
     dendrogram(Z, 
             labels=num_cols, 
             orientation='top', 
-            leaf_rotation=75
+            leaf_rotation=rotation
             )
     plt.suptitle('CHA : Classification Hiérarchique Ascendante', fontsize=26)
-    plt.tick_params(labelsize=15)
+    plt.tick_params(labelsize=label_size)

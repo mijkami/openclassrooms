@@ -64,7 +64,7 @@ def heatmap_num(df):
     plt.show()
     sns.set(font_scale=1)
 
-def heatmap_num_2(df):
+def heatmap_num_2(df, annot_val=False, textsize=12):
     f, ax = plt.subplots(figsize=(13, 18))
     corr_matrix = df.corr()
     mask = np.zeros_like(corr_matrix, dtype=np.bool_)
@@ -78,8 +78,9 @@ def heatmap_num_2(df):
                                     "ticks" : [-1, -.5, 0, 0.5, 1]},
                         vmin = -1,
                         vmax = 1,
-                        annot = True,
-                        annot_kws = {"size": 12})
+                        annot = annot_val,
+                        annot_kws = {"size": textsize}
+                        )
 
     #add the column names as labels
     ax.set_yticklabels(corr_matrix.columns, rotation = 0)
