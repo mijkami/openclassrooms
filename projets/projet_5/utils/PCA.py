@@ -112,7 +112,7 @@ def myPCA(df, clusters=None):
     print(df_explained_variance.head(20))
     print('-'*40)
 
-    return pc_infos
+    return pc_infos.style.background_gradient(cmap='YlGnBu')
 
 
 
