@@ -147,4 +147,4 @@ def CHA(df, num_cols):
             leaf_rotation=75
             )
     plt.suptitle('CHA : Classification Hiérarchique Ascendante', fontsize=26)
-    plt.tick_params(labelsize=18)
+    plt.tick_params(labelsize=15)
