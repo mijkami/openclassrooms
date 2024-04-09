@@ -6,7 +6,7 @@ from sklearn.decomposition import PCA
 from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
 from scipy.spatial.distance import squareform
 
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 from sklearn.impute import SimpleImputer
 #%matplotlib inline
 
@@ -14,7 +14,7 @@ import warnings
 warnings.filterwarnings('ignore')
 pd.options.mode.chained_assignment = None  # default='warn'
 
-def clean_data(data, select_X=None, impute=False, std=False): 
+def clean_data(data, select_X=None, impute=False, std=False, scale=standard): 
     """Returns dataframe with selected, imputed 
        and standardized features
     
@@ -45,9 +45,19 @@ def clean_data(data, select_X=None, impute=False, std=False):
     
     # (iii.) standardize 
     if std:
-        std_scaler = StandardScaler()
-        data = std_scaler.fit_transform(data)
-        print("\t>>> Standardized data")
+        if scale == standard:
+            std_scaler = StandardScaler()
+            data = std_scaler.fit_transform(data)
+            print("\t>>> Standardized data : StandardScaler")
+        if scale == minmax:
+            mmax_scaler = MinMaxScaler()
+            data = mmax_scaler.fit_transform(data)
+        if scale == robust:
+            robust_scaler = RobustScaler()
+            data = robust_scaler.fit_transform(data)
+        if scale == maxabs:
+            max_abs_scaler = MaxAbsScaler()
+            data = max_abs_scaler.fit_transform(data)
     
     return pd.DataFrame(data, columns=select_X)
 
