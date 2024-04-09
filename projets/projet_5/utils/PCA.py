@@ -14,7 +14,7 @@ import warnings
 warnings.filterwarnings('ignore')
 pd.options.mode.chained_assignment = None  # default='warn'
 
-def clean_data(data, select_X=None, impute=False, std=False, scale=standard): 
+def clean_data(data, select_X=None, impute=False, std=False): 
     """Returns dataframe with selected, imputed 
        and standardized features
     
@@ -45,28 +45,22 @@ def clean_data(data, select_X=None, impute=False, std=False, scale=standard):
     
     # (iii.) standardize 
     if std:
-        if scale == standard:
-            std_scaler = StandardScaler()
-            data = std_scaler.fit_transform(data)
-            print("\t>>> Standardized data : StandardScaler")
-        if scale == minmax:
-            mmax_scaler = MinMaxScaler()
-            data = mmax_scaler.fit_transform(data)
-        if scale == robust:
-            robust_scaler = RobustScaler()
-            data = robust_scaler.fit_transform(data)
-        if scale == maxabs:
-            max_abs_scaler = MaxAbsScaler()
-            data = max_abs_scaler.fit_transform(data)
+        std_scaler = StandardScaler()
+        data = std_scaler.fit_transform(data)
+        print("\t>>> Standardized data : StandardScaler")
     
     return pd.DataFrame(data, columns=select_X)
 
-def myPCA(df, clusters=None):
+def myPCA(df, clusters=None, mle_use=True, n_compos=0.95):
     # https://github.com/mazieres/analysis/blob/master/analysis.py#L19-34
     # Normalize data
     df_norm = (df - df.mean()) / df.std()
     # PCA
-    pca = PCA(n_components='mle')
+    if mle_use:
+        pca = PCA(n_components='mle')
+    else:
+        pca = PCA(n_components=n_compos)
+        
     pca_res = pca.fit_transform(df_norm.values)
     # Ebouli
     ebouli = pd.Series(pca.explained_variance_ratio_)
