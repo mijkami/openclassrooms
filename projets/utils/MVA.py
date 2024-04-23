@@ -13,6 +13,37 @@ import warnings
 warnings.filterwarnings('ignore')
 pd.options.mode.chained_assignment = None  # default='warn'
 
+def global_fill_info(df):
+    nb_rows, nb_columns = dataframe.shape
+
+    nb_data = df.count().sum()
+    filling_rate = nb_data / (nb_rows * nb_columns)
+    missing_rate = 1 - filling_rate
+    missing_values = (nb_rows * nb_columns) - nb_data
+
+    mask = df.isnull().any(axis=1)
+    rows_w_missing_values = len(df[mask])
+    rows_w_missing_values_percentage = rows_w_missing_values / nb_rows
+
+
+
+
+    mask = dataframe.isnull().any(axis=0)
+    cols_w_missing_values = len(dataframe[dataframe.columns[mask]].columns)
+    cols_w_missing_values_percentage = cols_w_missing_values / nb_columns
+
+
+
+    
+    print("DataFrame has {} rows and {} columns.".format(nb_rows, nb_columns))
+    print("")
+    print("Global filling rate of the DataFrame: {:.2%}".format(filling_rate))
+    print("Missing values in the DataFrame: {} ({:.2%})".format(missing_values, missing_rate))    
+    print("")
+    print("Number of rows with missing values: {} ({:.2%})".format(rows_w_missing_values, rows_w_missing_values_percentage))
+    print("Number of columns with missing values: {} ({:.2%})".format(cols_w_missing_values, cols_w_missing_values_percentage))
+
+
 def displayColumnDistribution(df):
   i=1
   for col in df.columns:
