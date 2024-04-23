@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+
 from sklearn import manifold
 from sklearn import cluster, metrics
 
@@ -91,12 +93,12 @@ def TSNE_visu_fct(X_tsne, y_cat_num, labels, lab_cat, ARI) :
     ax = fig.add_subplot(121)
     scatter = ax.scatter(X_tsne[:,0],X_tsne[:,1], c=y_cat_num, cmap='Set1')
     ax.legend(handles=scatter.legend_elements()[0], labels=lab_cat, loc="best", title="Categorie")
-    plt.title('Représentation des tweets par catégories réelles')
+    plt.title('Représentation des phrases par catégories réelles')
     
     ax = fig.add_subplot(122)
     scatter = ax.scatter(X_tsne[:,0],X_tsne[:,1], c=labels, cmap='Set1')
     ax.legend(handles=scatter.legend_elements()[0], labels=set(labels), loc="best", title="Clusters")
-    plt.title('Représentation des tweets par clusters')
+    plt.title('Représentation des phrases par clusters')
     
     plt.show()
     print("ARI : ", ARI)
