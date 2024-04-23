@@ -14,7 +14,7 @@ warnings.filterwarnings('ignore')
 pd.options.mode.chained_assignment = None  # default='warn'
 
 def global_fill_info(df):
-    nb_rows, nb_columns = dataframe.shape
+    nb_rows, nb_columns = df.shape
 
     nb_data = df.count().sum()
     filling_rate = nb_data / (nb_rows * nb_columns)
@@ -25,15 +25,9 @@ def global_fill_info(df):
     rows_w_missing_values = len(df[mask])
     rows_w_missing_values_percentage = rows_w_missing_values / nb_rows
 
-
-
-
-    mask = dataframe.isnull().any(axis=0)
-    cols_w_missing_values = len(dataframe[dataframe.columns[mask]].columns)
+    mask = df.isnull().any(axis=0)
+    cols_w_missing_values = len(df[df.columns[mask]].columns)
     cols_w_missing_values_percentage = cols_w_missing_values / nb_columns
-
-
-
     
     print("DataFrame has {} rows and {} columns.".format(nb_rows, nb_columns))
     print("")
