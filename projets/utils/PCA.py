@@ -158,7 +158,7 @@ def CHA(df, num_cols, label_size=15, rotation=90):
 
 
 
-def PCA_diag(y_true, y_pred, true_labels=None):
+def PCA_diag(y_true, y_pred, true_labels=None, reorder_indices=False):
     conf_mat = metrics.confusion_matrix(y_true, y_pred)
     conf_mat_enum = list(range(0, conf_mat.shape[1]))
 
@@ -174,17 +174,26 @@ def PCA_diag(y_true, y_pred, true_labels=None):
 
     # Créer une matrice de confusion vide avec la même forme que l'originale
     conf_mat_diagonalized = np.zeros_like(conf_mat)
+    # Créer liste vide pour ordre des labels réordonnés
+    indices_reorder = conf_mat_diagonalized[0].copy()
 
     # Réarranger les colonnes en fonction des indices max
     for col in range(conf_mat.shape[1]):
         row = indices_max_col[col]
         conf_mat_diagonalized[:, row] += conf_mat[:, col]
+        indices_reorder[row] = col
 
     # Créer un DataFrame pandas pour la matrice diagonalisée
     if true_labels:
-        df_cm_diagonalized = pd.DataFrame(conf_mat_diagonalized, index=[label[:8] for label in true_labels])
+        if reorder_indices:
+            df_cm_diagonalized = pd.DataFrame(conf_mat_diagonalized, index=[label[:8] for label in true_labels], columns=indices_reorder)
+        else:    
+            df_cm_diagonalized = pd.DataFrame(conf_mat_diagonalized, index=[label[:8] for label in true_labels], columns=conf_mat_enum)
     else:
-        df_cm_diagonalized = pd.DataFrame(conf_mat_diagonalized, index=conf_mat_enum)
+        if reorder_indices:
+            df_cm_diagonalized = pd.DataFrame(conf_mat_diagonalized, index=conf_mat_enum, columns=indices_reorder)
+        else:    
+            df_cm_diagonalized = pd.DataFrame(conf_mat_diagonalized, index=conf_mat_enum, columns=conf_mat_enum)
 
     """plt.figure(figsize = (12,4))
     sns.heatmap(df_cm, annot=True, cmap="Blues", fmt='d')
