@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 from sklearn import manifold
 from sklearn import cluster, metrics
+from sklearn.decomposition import NMF, LatentDirichletAllocation, MiniBatchNMF
 
 import nltk
 nltk.download("stopwords")
@@ -103,3 +104,86 @@ def TSNE_visu_fct(X_tsne, y_cat_num, labels, lab_cat, ARI, verbose=True) :
     plt.show()
     if verbose:
         print("ARI : ", ARI)
+
+# will be used in next fct for extracting most imported words per topic
+# https://scikit-learn.org/stable/auto_examples/applications/plot_topics_extraction_with_nmf_lda.html#sphx-glr-auto-examples-applications-plot-topics-extraction-with-nmf-lda-py
+def plot_top_words(model, feature_names, n_top_words, title):
+    fig, axes = plt.subplots(2, 4, figsize=(30, 15), sharex=True)
+    axes = axes.flatten()
+    for topic_idx, topic in enumerate(model.components_):
+        top_features_ind = topic.argsort()[-n_top_words:]
+        top_features = feature_names[top_features_ind]
+        weights = topic[top_features_ind]
+
+        ax = axes[topic_idx]
+        ax.barh(top_features, weights, height=0.7)
+        ax.set_title(f"Topic {topic_idx +1}", fontdict={"fontsize": 30})
+        ax.tick_params(axis="both", which="major", labelsize=20)
+        for i in "top right left".split():
+            ax.spines[i].set_visible(False)
+        fig.suptitle(title, fontsize=40)
+
+    plt.subplots_adjust(top=0.90, bottom=0.05, wspace=0.90, hspace=0.3)
+    plt.show()
+
+def NMF_top_words(model, X, n_top_words, n_components, init="nndsvda"):
+    nmf = NMF(
+        n_components=n_components,
+        random_state=1,
+        init=init,
+        beta_loss="frobenius",
+        alpha_W=0.00005,
+        alpha_H=0.00005,
+        l1_ratio=1,
+    ).fit(X)
+    
+    tfidf_feature_names = model.get_feature_names_out()
+    plot_top_words(
+        nmf, tfidf_feature_names, n_top_words, "Topics in NMF model (Frobenius norm)"
+    )
+
+def top_words(model, X, n_top_words, n_components, plot_model='NMF', init="nndsvda", batch_size=128):
+    if plot_model=='NMF':
+        nmf = NMF(
+            n_components=n_components,
+            random_state=1,
+            init=init,
+            beta_loss="frobenius",
+            alpha_W=0.00005,
+            alpha_H=0.00005,
+            l1_ratio=1,
+        ).fit(X)
+
+        model_feature_names = model.get_feature_names_out()
+        plot_top_words(
+            nmf, model_feature_names, n_top_words, "Topics in NMF model (Frobenius norm)"
+        )
+    elif plot_model=='MBNMF':
+        mbnmf = MiniBatchNMF(
+            n_components=n_components,
+            random_state=1,
+            batch_size=batch_size,
+            init=init,
+            beta_loss="kullback-leibler",
+            alpha_W=0.00005,
+            alpha_H=0.00005,
+            l1_ratio=0.5,
+        ).fit(X)
+        model_feature_names = model.get_feature_names_out()
+        plot_top_words(
+            mbnmf, model_feature_names, n_top_words, "Topics in MiniBatchNMF model (generalized Kullback-Leibler divergence)"
+            )
+    elif plot_model=='LDA':
+        lda = LatentDirichletAllocation(
+            n_components=n_components,
+            max_iter=5,
+            learning_method="online",
+            learning_offset=50.0,
+            random_state=0,
+        ).fit(X)
+        model_feature_names = model.get_feature_names_out()
+        plot_top_words(
+            lda, model_feature_names, n_top_words, "Topics in LDA model"
+        )
+    else:
+        print('Model not avalaible, please check library / function')
