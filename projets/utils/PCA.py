@@ -158,12 +158,17 @@ def CHA(df, num_cols, label_size=15, rotation=90):
 
 
 
-def PCA_diag(y_true, y_pred):
+def PCA_diag(y_true, y_pred, true_labels=None):
     conf_mat = metrics.confusion_matrix(y_true, y_pred)
     conf_mat_enum = list(range(0, conf_mat.shape[1]))
 
-    df_cm = pd.DataFrame(conf_mat, index = conf_mat_enum,
-                    columns = conf_mat_enum)
+    if true_labels:
+        df_cm = pd.DataFrame(conf_mat, index = [label[:8] for label in true_labels]
+                             , columns = conf_mat_enum)
+    else:
+        df_cm = pd.DataFrame(conf_mat, index = conf_mat_enum
+                             , columns = conf_mat_enum)
+        
     # Obtenir les indices des valeurs maximales par colonne
     indices_max_col = np.argmax(conf_mat, axis=0)
 
@@ -176,8 +181,10 @@ def PCA_diag(y_true, y_pred):
         conf_mat_diagonalized[:, row] += conf_mat[:, col]
 
     # Créer un DataFrame pandas pour la matrice diagonalisée
-    df_cm_diagonalized = pd.DataFrame(conf_mat_diagonalized, index=conf_mat_enum,
-                                    columns=conf_mat_enum)
+    if true_labels:
+        df_cm_diagonalized = pd.DataFrame(conf_mat_diagonalized, index=[label[:8] for label in true_labels])
+    else:
+        df_cm_diagonalized = pd.DataFrame(conf_mat_diagonalized, index=conf_mat_enum)
 
     """plt.figure(figsize = (12,4))
     sns.heatmap(df_cm, annot=True, cmap="Blues", fmt='d')
