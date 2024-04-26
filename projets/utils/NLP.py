@@ -69,10 +69,10 @@ def transform_dl_fct(desc_text) :
 
 
 # Calcul Tsne, détermination des clusters et calcul ARI entre vrais catégorie et n° de clusters
-def ARI_fct(features, labels, y_cat_num) :
+def ARI_fct(features, labels, y_cat_num, perplexity_val=30) :
     time1 = time.time()
     num_labels=len(labels)
-    tsne = manifold.TSNE(n_components=2, perplexity=30, n_iter=2000, 
+    tsne = manifold.TSNE(n_components=2, perplexity=perplexity_val, n_iter=2000, 
                                  init='random', learning_rate=200, random_state=42)
     X_tsne = tsne.fit_transform(features)
     
@@ -87,7 +87,7 @@ def ARI_fct(features, labels, y_cat_num) :
 
 
 # visualisation du Tsne selon les vraies catégories et selon les clusters
-def TSNE_visu_fct(X_tsne, y_cat_num, labels, lab_cat, ARI) :
+def TSNE_visu_fct(X_tsne, y_cat_num, labels, lab_cat, ARI, verbose=True) :
     fig = plt.figure(figsize=(15,6))
     
     ax = fig.add_subplot(121)
@@ -101,4 +101,5 @@ def TSNE_visu_fct(X_tsne, y_cat_num, labels, lab_cat, ARI) :
     plt.title('Représentation des phrases par clusters')
     
     plt.show()
-    print("ARI : ", ARI)
+    if verbose:
+        print("ARI : ", ARI)

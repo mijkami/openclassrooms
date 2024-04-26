@@ -2,12 +2,14 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+
 from sklearn.decomposition import PCA
 from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
 from scipy.spatial.distance import squareform
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 from sklearn.impute import SimpleImputer
+from sklearn import metrics
 #%matplotlib inline
 
 import warnings
@@ -153,3 +155,43 @@ def CHA(df, num_cols, label_size=15, rotation=90):
             )
     plt.suptitle('CHA : Classification Hiérarchique Ascendante', fontsize=26)
     plt.tick_params(labelsize=label_size)
+
+
+
+def PCA_diag(y_true, y_pred):
+    conf_mat = metrics.confusion_matrix(y_true, y_pred)
+    conf_mat_enum = list(range(0, conf_mat.shape[1]))
+
+    df_cm = pd.DataFrame(conf_mat, index = conf_mat_enum,
+                    columns = conf_mat_enum)
+    # Obtenir les indices des valeurs maximales par colonne
+    indices_max_col = np.argmax(conf_mat, axis=0)
+
+    # Créer une matrice de confusion vide avec la même forme que l'originale
+    conf_mat_diagonalized = np.zeros_like(conf_mat)
+
+    # Réarranger les colonnes en fonction des indices max
+    for col in range(conf_mat.shape[1]):
+        row = indices_max_col[col]
+        conf_mat_diagonalized[:, row] += conf_mat[:, col]
+
+    # Créer un DataFrame pandas pour la matrice diagonalisée
+    df_cm_diagonalized = pd.DataFrame(conf_mat_diagonalized, index=conf_mat_enum,
+                                    columns=conf_mat_enum)
+
+    """plt.figure(figsize = (12,4))
+    sns.heatmap(df_cm, annot=True, cmap="Blues", fmt='d')
+    sns.heatmap(df_cm_diagonalized, annot=True, cmap="Blues", fmt='d')
+    plt.show()"""
+
+    # Créer une figure avec deux sous-graphiques côte à côte
+    plt.figure(figsize=(12, 4))
+    plt.subplot(1, 2, 1)  # Premier sous-graphique
+    sns.heatmap(df_cm, annot=True, cmap="Blues", fmt='d')
+    plt.title('Matrice de Confusion Originale')
+
+    plt.subplot(1, 2, 2)  # Deuxième sous-graphique
+    sns.heatmap(df_cm_diagonalized, annot=True, cmap="Blues", fmt='d')
+    plt.title('Matrice de Confusion Diagonalisée')
+
+    plt.show()
