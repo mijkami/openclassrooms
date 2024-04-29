@@ -70,7 +70,7 @@ def transform_dl_fct(desc_text) :
 
 
 # Calcul Tsne, détermination des clusters et calcul ARI entre vrais catégorie et n° de clusters
-def ARI_fct(features, labels, y_cat_num, perplexity_val=30) :
+def ARI_fct(features, labels, y_cat_num, perplexity_val=30, verbose=True) :
     time1 = time.time()
     num_labels=len(labels)
     tsne = manifold.TSNE(n_components=2, perplexity=perplexity_val, n_iter=2000, 
@@ -82,7 +82,8 @@ def ARI_fct(features, labels, y_cat_num, perplexity_val=30) :
     cls.fit(X_tsne)
     ARI = np.round(metrics.adjusted_rand_score(y_cat_num, cls.labels_),4)
     time2 = np.round(time.time() - time1,0)
-    print("ARI : ", ARI, "time : ", time2)
+    if verbose :
+        print("ARI : ", ARI, "time : ", time2)
     
     return ARI, X_tsne, cls.labels_
 
