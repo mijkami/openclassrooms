@@ -88,8 +88,8 @@ def ARI_fct(features, labels, y_cat_num, perplexity_val=30) :
 
 
 # visualisation du Tsne selon les vraies catégories et selon les clusters
-def TSNE_visu_fct(X_tsne, y_cat_num, labels, lab_cat, ARI, verbose=True) :
-    fig = plt.figure(figsize=(15,6))
+def TSNE_visu_fct(X_tsne, y_cat_num, labels, lab_cat, ARI, verbose=True, length=15, height=6) :
+    fig = plt.figure(figsize=(length,height))
     
     ax = fig.add_subplot(121)
     scatter = ax.scatter(X_tsne[:,0],X_tsne[:,1], c=y_cat_num, cmap='Set1')
