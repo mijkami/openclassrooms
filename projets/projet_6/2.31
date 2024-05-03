@@ -1,0 +1,5 @@
+Requirement already satisfied: requests in c:\users\dgaillot\appdata\local\anaconda3\envs\base_env_4\lib\site-packages (2.28.1)
+Requirement already satisfied: charset-normalizer<3,>=2 in c:\users\dgaillot\appdata\local\anaconda3\envs\base_env_4\lib\site-packages (from requests) (2.1.0)
+Requirement already satisfied: idna<4,>=2.5 in c:\users\dgaillot\appdata\local\anaconda3\envs\base_env_4\lib\site-packages (from requests) (3.3)
+Requirement already satisfied: urllib3<1.27,>=1.21.1 in c:\users\dgaillot\appdata\local\anaconda3\envs\base_env_4\lib\site-packages (from requests) (1.26.10)
+Requirement already satisfied: certifi>=2017.4.17 in c:\users\dgaillot\appdata\local\anaconda3\envs\base_env_4\lib\site-packages (from requests) (2022.6.15)
