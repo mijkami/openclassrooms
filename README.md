@@ -29,10 +29,12 @@ $ jupyter notebook
 
 $ pyenv install 3.9.7
 $ pyenv local 3.9.7
+$ pyenv which python
 $ python --versions
 $ pyenv virtualenvwrapper
 $ mkvirtualenv --python /home/mijka/.pyenv/versions/3.9.7/bin/python p5
 $ which python
+$ python kernel install --user --name=p5
 
 # usage
 
