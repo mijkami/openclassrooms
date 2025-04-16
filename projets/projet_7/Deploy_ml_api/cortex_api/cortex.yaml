@@ -1,0 +1,7 @@
+# cortex.yaml
+
+- name: house-price-prediction
+  kind: RealtimeAPI
+  predictor:
+    type: python
+    path: predictor.py
