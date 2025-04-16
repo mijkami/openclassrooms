@@ -22,3 +22,7 @@ $ pyenv virtualenv 3.9.7 data_p4
 $ pyenv local data_p4
 $ pip install -r requirements.txt
 $ jupyter notebook
+
+
+
+ipython kernel install --user --name=p6_2
