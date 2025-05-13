@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/47f928a2151c4a75b3877232501d919a/artifacts
+end_time: 1747143422222
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 47f928a2151c4a75b3877232501d919a
+run_name: sneaky-squirrel-565
+run_uuid: 47f928a2151c4a75b3877232501d919a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747143413090
+status: 3
+tags: []
+user_id: mijka
