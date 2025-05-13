@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/444885770209473777/6e9f2b1c86934684b2a43eec8661f3ee/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '444885770209473777'
+lifecycle_stage: active
+run_id: 6e9f2b1c86934684b2a43eec8661f3ee
+run_name: amazing-crane-333
+run_uuid: 6e9f2b1c86934684b2a43eec8661f3ee
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747141611298
+status: 1
+tags: []
+user_id: mijka
