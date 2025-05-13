@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/8bdfe6930f874e3dbdc486f3523e6e73/artifacts
+end_time: 1747139927580
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8bdfe6930f874e3dbdc486f3523e6e73
+run_name: orderly-carp-416
+run_uuid: 8bdfe6930f874e3dbdc486f3523e6e73
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747139923861
+status: 4
+tags: []
+user_id: mijka

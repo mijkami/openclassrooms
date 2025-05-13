@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/5a25ba2c36b5484ab3e181f79f5ab419/artifacts
+end_time: 1747140525604
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 5a25ba2c36b5484ab3e181f79f5ab419
+run_name: trusting-colt-438
+run_uuid: 5a25ba2c36b5484ab3e181f79f5ab419
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747140517063
+status: 3
+tags: []
+user_id: mijka

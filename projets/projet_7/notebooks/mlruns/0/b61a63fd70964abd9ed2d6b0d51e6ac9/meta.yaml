@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/b61a63fd70964abd9ed2d6b0d51e6ac9/artifacts
+end_time: 1747139923858
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: b61a63fd70964abd9ed2d6b0d51e6ac9
+run_name: able-chimp-730
+run_uuid: b61a63fd70964abd9ed2d6b0d51e6ac9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747139916148
+status: 3
+tags: []
+user_id: mijka

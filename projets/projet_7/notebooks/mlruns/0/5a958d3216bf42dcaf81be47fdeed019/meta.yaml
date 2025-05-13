@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/5a958d3216bf42dcaf81be47fdeed019/artifacts
+end_time: 1747140070177
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 5a958d3216bf42dcaf81be47fdeed019
+run_name: auspicious-lamb-533
+run_uuid: 5a958d3216bf42dcaf81be47fdeed019
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747140063742
+status: 3
+tags: []
+user_id: mijka

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/8c2e98bb7bbc40f3be8d60e8f777db8a/artifacts
+end_time: 1747139986045
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8c2e98bb7bbc40f3be8d60e8f777db8a
+run_name: spiffy-sponge-535
+run_uuid: 8c2e98bb7bbc40f3be8d60e8f777db8a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747139944900
+status: 3
+tags: []
+user_id: mijka

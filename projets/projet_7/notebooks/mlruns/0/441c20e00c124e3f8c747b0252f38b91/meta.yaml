@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/441c20e00c124e3f8c747b0252f38b91/artifacts
+end_time: 1747140063738
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 441c20e00c124e3f8c747b0252f38b91
+run_name: capricious-gnat-667
+run_uuid: 441c20e00c124e3f8c747b0252f38b91
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747140057588
+status: 3
+tags: []
+user_id: mijka
