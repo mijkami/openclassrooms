@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/444885770209473777/e68dfcf25ee3482d85be9f3ffedac8ec/artifacts
+end_time: 1747145745806
+entry_point_name: ''
+experiment_id: '444885770209473777'
+lifecycle_stage: active
+run_id: e68dfcf25ee3482d85be9f3ffedac8ec
+run_name: funny-shrike-298
+run_uuid: e68dfcf25ee3482d85be9f3ffedac8ec
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747145222227
+status: 4
+tags: []
+user_id: mijka

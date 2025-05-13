@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/444885770209473777/e31fdf5c168549d490d6126ddad09ed0/artifacts
+end_time: 1747145186541
+entry_point_name: ''
+experiment_id: '444885770209473777'
+lifecycle_stage: active
+run_id: e31fdf5c168549d490d6126ddad09ed0
+run_name: abrasive-grouse-524
+run_uuid: e31fdf5c168549d490d6126ddad09ed0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747145101454
+status: 3
+tags: []
+user_id: mijka

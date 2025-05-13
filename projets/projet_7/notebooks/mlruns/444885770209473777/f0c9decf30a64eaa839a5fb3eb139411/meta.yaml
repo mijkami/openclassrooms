@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/444885770209473777/f0c9decf30a64eaa839a5fb3eb139411/artifacts
+end_time: 1747145222222
+entry_point_name: ''
+experiment_id: '444885770209473777'
+lifecycle_stage: active
+run_id: f0c9decf30a64eaa839a5fb3eb139411
+run_name: blushing-shrike-810
+run_uuid: f0c9decf30a64eaa839a5fb3eb139411
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747145186544
+status: 3
+tags: []
+user_id: mijka

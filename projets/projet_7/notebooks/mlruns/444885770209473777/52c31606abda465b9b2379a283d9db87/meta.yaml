@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/444885770209473777/52c31606abda465b9b2379a283d9db87/artifacts
+end_time: 1747144227476
+entry_point_name: ''
+experiment_id: '444885770209473777'
+lifecycle_stage: active
+run_id: 52c31606abda465b9b2379a283d9db87
+run_name: fortunate-lark-160
+run_uuid: 52c31606abda465b9b2379a283d9db87
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747143526707
+status: 3
+tags: []
+user_id: mijka
