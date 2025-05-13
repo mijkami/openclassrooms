@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/444885770209473777/4f2babda947b4d76bba5bde64fce9fad/artifacts
+end_time: 1747141484739
+entry_point_name: ''
+experiment_id: '444885770209473777'
+lifecycle_stage: active
+run_id: 4f2babda947b4d76bba5bde64fce9fad
+run_name: likeable-mink-578
+run_uuid: 4f2babda947b4d76bba5bde64fce9fad
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747141221430
+status: 3
+tags: []
+user_id: mijka

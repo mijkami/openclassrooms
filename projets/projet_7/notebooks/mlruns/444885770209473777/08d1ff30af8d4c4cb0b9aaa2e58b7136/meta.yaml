@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/444885770209473777/08d1ff30af8d4c4cb0b9aaa2e58b7136/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '444885770209473777'
+lifecycle_stage: active
+run_id: 08d1ff30af8d4c4cb0b9aaa2e58b7136
+run_name: rumbling-rook-511
+run_uuid: 08d1ff30af8d4c4cb0b9aaa2e58b7136
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747141484742
+status: 1
+tags: []
+user_id: mijka
