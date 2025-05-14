@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/fa0397f82e67467a9a3cb0ccd1200def/artifacts
+end_time: 1747205165919
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: fa0397f82e67467a9a3cb0ccd1200def
+run_name: placid-moth-450
+run_uuid: fa0397f82e67467a9a3cb0ccd1200def
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747204993051
+status: 4
+tags: []
+user_id: mijka

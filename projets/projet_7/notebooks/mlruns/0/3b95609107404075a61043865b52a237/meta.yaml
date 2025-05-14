@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/3b95609107404075a61043865b52a237/artifacts
+end_time: 1747204553332
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 3b95609107404075a61043865b52a237
+run_name: skittish-mouse-260
+run_uuid: 3b95609107404075a61043865b52a237
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747204485269
+status: 4
+tags: []
+user_id: mijka

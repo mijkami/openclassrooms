@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/cfbe66b3f00843f7bf18e1b1dad91114/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: cfbe66b3f00843f7bf18e1b1dad91114
+run_name: popular-hound-793
+run_uuid: cfbe66b3f00843f7bf18e1b1dad91114
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747205216936
+status: 1
+tags: []
+user_id: mijka
