@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/2684137d64a04387bce53f66ca887649/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2684137d64a04387bce53f66ca887649
+run_name: fortunate-duck-452
+run_uuid: 2684137d64a04387bce53f66ca887649
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747208660663
+status: 1
+tags: []
+user_id: mijka
