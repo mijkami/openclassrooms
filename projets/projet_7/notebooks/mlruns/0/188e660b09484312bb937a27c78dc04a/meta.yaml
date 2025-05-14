@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/188e660b09484312bb937a27c78dc04a/artifacts
+end_time: 1747210514495
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 188e660b09484312bb937a27c78dc04a
+run_name: selective-bee-221
+run_uuid: 188e660b09484312bb937a27c78dc04a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747210105679
+status: 4
+tags: []
+user_id: mijka

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/81cf6a793749493886aa228db396beee/artifacts
+end_time: 1747210105643
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 81cf6a793749493886aa228db396beee
+run_name: polite-fish-617
+run_uuid: 81cf6a793749493886aa228db396beee
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747209793345
+status: 3
+tags: []
+user_id: mijka

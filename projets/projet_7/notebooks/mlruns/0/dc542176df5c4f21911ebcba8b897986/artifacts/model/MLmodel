@@ -1,0 +1,62 @@
+artifact_path: model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.9.7
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.5.2
+is_signature_from_type_hint: false
+mlflow_version: 2.22.0
+model_size_bytes: 1848766
+model_uuid: ca8bb37e344642f0aa3e4c55635e76b9
+prompts: null
+run_id: dc542176df5c4f21911ebcba8b897986
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "float", "name": "EXT_SOURCE_2", "required": true}, {"type":
+    "float", "name": "EXT_SOURCE_3", "required": true}, {"type": "float", "name":
+    "DAYS_EMPLOYED", "required": true}, {"type": "float", "name": "INSTAL_DPD_MEAN",
+    "required": true}, {"type": "integer", "name": "CODE_GENDER", "required": true},
+    {"type": "float", "name": "PAYMENT_RATE", "required": true}, {"type": "float",
+    "name": "DAYS_EMPLOYED_PERC", "required": true}, {"type": "integer", "name": "DAYS_BIRTH",
+    "required": true}, {"type": "float", "name": "PREV_CNT_PAYMENT_MEAN", "required":
+    true}, {"type": "float", "name": "AMT_GOODS_PRICE", "required": true}, {"type":
+    "float", "name": "AMT_ANNUITY", "required": true}, {"type": "float", "name": "ANNUITY_INCOME_PERC",
+    "required": true}, {"type": "float", "name": "INSTAL_AMT_PAYMENT_SUM", "required":
+    true}, {"type": "float", "name": "APPROVED_AMT_DOWN_PAYMENT_MAX", "required":
+    true}, {"type": "float", "name": "BURO_AMT_CREDIT_SUM_DEBT_MEAN", "required":
+    true}, {"type": "integer", "name": "NAME_EDUCATION_TYPE_Highereducation", "required":
+    true}, {"type": "float", "name": "AMT_CREDIT", "required": true}, {"type": "float",
+    "name": "ACTIVE_DAYS_CREDIT_MAX", "required": true}, {"type": "float", "name":
+    "BURO_DAYS_CREDIT_MEAN", "required": true}, {"type": "float", "name": "PREV_APP_CREDIT_PERC_MEAN",
+    "required": true}, {"type": "float", "name": "INSTAL_PAYMENT_DIFF_MEAN", "required":
+    true}, {"type": "float", "name": "POS_MONTHS_BALANCE_SIZE", "required": true},
+    {"type": "float", "name": "APPROVED_CNT_PAYMENT_MEAN", "required": true}, {"type":
+    "integer", "name": "DAYS_ID_PUBLISH", "required": true}, {"type": "float", "name":
+    "APPROVED_AMT_ANNUITY_MEAN", "required": true}, {"type": "float", "name": "ACTIVE_DAYS_CREDIT_ENDDATE_MAX",
+    "required": true}, {"type": "float", "name": "BURO_DAYS_CREDIT_MAX", "required":
+    true}, {"type": "float", "name": "TOTALAREA_MODE", "required": true}, {"type":
+    "float", "name": "INSTAL_PAYMENT_PERC_MEAN", "required": true}, {"type": "float",
+    "name": "INSTAL_DAYS_ENTRY_PAYMENT_MEAN", "required": true}, {"type": "float",
+    "name": "PREV_APP_CREDIT_PERC_MIN", "required": true}, {"type": "float", "name":
+    "INSTAL_AMT_PAYMENT_MIN", "required": true}, {"type": "float", "name": "BURO_CREDIT_ACTIVE_Closed_MEAN",
+    "required": true}, {"type": "float", "name": "DAYS_REGISTRATION", "required":
+    true}, {"type": "float", "name": "APPROVED_AMT_ANNUITY_MAX", "required": true},
+    {"type": "float", "name": "INSTAL_AMT_PAYMENT_MEAN", "required": true}, {"type":
+    "float", "name": "ACTIVE_DAYS_CREDIT_ENDDATE_MEAN", "required": true}]'
+  outputs: '[{"type": "long", "required": true}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-05-14 08:03:07.533888'
