@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/51bff029358b4f4d9e464c6e79ed5d48/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 51bff029358b4f4d9e464c6e79ed5d48
+run_name: selective-crow-486
+run_uuid: 51bff029358b4f4d9e464c6e79ed5d48
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747208133643
+status: 1
+tags: []
+user_id: mijka
