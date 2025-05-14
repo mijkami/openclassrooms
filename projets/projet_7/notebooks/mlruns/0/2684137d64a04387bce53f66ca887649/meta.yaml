@@ -1,5 +1,5 @@
 artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/2684137d64a04387bce53f66ca887649/artifacts
-end_time: null
+end_time: 1747208856875
 entry_point_name: ''
 experiment_id: '0'
 lifecycle_stage: active
@@ -10,6 +10,6 @@ source_name: ''
 source_type: 4
 source_version: ''
 start_time: 1747208660663
-status: 1
+status: 3
 tags: []
 user_id: mijka

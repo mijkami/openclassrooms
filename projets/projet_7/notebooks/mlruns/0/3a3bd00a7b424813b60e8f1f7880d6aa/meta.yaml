@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/3a3bd00a7b424813b60e8f1f7880d6aa/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 3a3bd00a7b424813b60e8f1f7880d6aa
+run_name: indecisive-snipe-557
+run_uuid: 3a3bd00a7b424813b60e8f1f7880d6aa
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747209024443
+status: 1
+tags: []
+user_id: mijka
