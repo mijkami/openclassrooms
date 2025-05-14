@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/9eb75fcd753d47319765fd7ef7e24b8d/artifacts
+end_time: 1747213535942
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9eb75fcd753d47319765fd7ef7e24b8d
+run_name: clumsy-calf-921
+run_uuid: 9eb75fcd753d47319765fd7ef7e24b8d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747211018778
+status: 3
+tags: []
+user_id: mijka
