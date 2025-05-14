@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/cfc3cb7ea246465dab1ed50d64f2fc35/artifacts
+end_time: 1747205585163
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: cfc3cb7ea246465dab1ed50d64f2fc35
+run_name: rare-midge-772
+run_uuid: cfc3cb7ea246465dab1ed50d64f2fc35
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747205342196
+status: 3
+tags: []
+user_id: mijka

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/20f355aaefef4a09b1325d537c07ca90/artifacts
+end_time: 1747206420896
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 20f355aaefef4a09b1325d537c07ca90
+run_name: charming-elk-877
+run_uuid: 20f355aaefef4a09b1325d537c07ca90
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747206288703
+status: 3
+tags: []
+user_id: mijka

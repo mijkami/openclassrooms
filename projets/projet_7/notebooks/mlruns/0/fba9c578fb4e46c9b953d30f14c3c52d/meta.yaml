@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/fba9c578fb4e46c9b953d30f14c3c52d/artifacts
+end_time: 1747205980581
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: fba9c578fb4e46c9b953d30f14c3c52d
+run_name: adventurous-slug-501
+run_uuid: fba9c578fb4e46c9b953d30f14c3c52d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747205585168
+status: 4
+tags: []
+user_id: mijka

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/a7803ba2a6fd43ad9e869c1f1249a825/artifacts
+end_time: 1747205994312
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a7803ba2a6fd43ad9e869c1f1249a825
+run_name: masked-koi-867
+run_uuid: a7803ba2a6fd43ad9e869c1f1249a825
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747205981712
+status: 4
+tags: []
+user_id: mijka
