@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/8d9fe9fe555f4c5ab865806dc22adcab/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8d9fe9fe555f4c5ab865806dc22adcab
+run_name: unruly-snake-828
+run_uuid: 8d9fe9fe555f4c5ab865806dc22adcab
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747207585467
+status: 1
+tags: []
+user_id: mijka
