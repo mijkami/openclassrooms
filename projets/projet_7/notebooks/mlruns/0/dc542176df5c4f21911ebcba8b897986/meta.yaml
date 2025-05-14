@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/dc542176df5c4f21911ebcba8b897986/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: dc542176df5c4f21911ebcba8b897986
+run_name: redolent-grub-135
+run_uuid: dc542176df5c4f21911ebcba8b897986
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747209588210
+status: 1
+tags: []
+user_id: mijka
