@@ -8,3 +8,5 @@
 /projets/projet_4/map*
 /projets/projet_6/data/credentials.py
 */credentials.py
+/projets/projet_7/mlruns/*
+/projets/projet_7/models/*

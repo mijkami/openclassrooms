@@ -1,0 +1,15 @@
+artifact_uri: file:///home/mijka/code/openclassrooms/projets/projet_7/notebooks/mlruns/0/aedf13f19089461eaa681b84c15f83a0/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: aedf13f19089461eaa681b84c15f83a0
+run_name: rebellious-snake-321
+run_uuid: aedf13f19089461eaa681b84c15f83a0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747379485276
+status: 1
+tags: []
+user_id: mijka
