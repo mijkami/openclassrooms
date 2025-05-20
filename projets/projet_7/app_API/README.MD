@@ -1,6 +1,16 @@
 ### Commandes installation
 
+# Lancement service Docker
+sudo systemctl start docker
+
+# Activation service au boot
+sudo systemctl enable docker
+
+# Ajouter utilisateur au groupe decker
+sudo usermod -aG docker $USER
+
 # Utilisation de pyenv virtualenvwrapper pour l'environnement en local
+pyenv virtualenvwrapper
 mkvirtualenv fastapi-env
 
 # Exécuter ligne suivante dans l'environnement
@@ -33,6 +43,7 @@ sudo systemctl restart docker
 ### Tests
 
 # Exécution des tests
+workon fastapi-env
 pytest tests/test_main.py
 
 # Exécuter un test spécifique
