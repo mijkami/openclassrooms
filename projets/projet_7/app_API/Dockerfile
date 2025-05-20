@@ -16,6 +16,9 @@ COPY ./app /app
 # Copier le fichier de données
 COPY ./data/data.parquet.gzip /app/data/data.parquet.gzip
 
+ENV MODEL_PATH=/app/model.pkl
+ENV DATA_PATH=/app/data/data.parquet.gzip
+
 # Exposer le port
 EXPOSE 8000
 

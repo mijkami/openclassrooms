@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Response
+import os
 import pandas as pd
 import pickle
 import shap
@@ -6,12 +7,16 @@ from pydantic import BaseModel
 from typing import List
 import traceback
 
+# Charger les variables d'environnement
+MODEL_PATH = os.getenv('MODEL_PATH', 'app/model.pkl')
+DATA_PATH = os.getenv('DATA_PATH', 'data/data.parquet.gzip')
+
 # Charger le modèle
-with open('model.pkl', 'rb') as file:
+with open(MODEL_PATH, 'rb') as file:
     model = pickle.load(file)
     
-# Charger les données 
-data = pd.read_parquet('/app/data/data.parquet.gzip')
+# Charger les données
+data = pd.read_parquet(DATA_PATH)
 #data = pd.read_csv('data.csv')
 
 # Initialiser l'application FastAPI

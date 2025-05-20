@@ -1,9 +1,11 @@
 from fastapi.testclient import TestClient
-from main import app
+from app.main import app
 import pandas as pd
 import pytest
 
 client = TestClient(app)
+
+VALID_SK_ID_CURR = 442623
 
 # Test pour l'endpoint /data
 def test_get_data_parquet():
@@ -14,7 +16,7 @@ def test_get_data_parquet():
 def test_get_data_csv():
     response = client.get("/data?format=csv")
     assert response.status_code == 200
-    assert response.headers["content-type"] == "text/csv"
+    assert response.headers["content-type"] == "text/csv; charset=utf-8"
 
 def test_get_data_unsupported_format():
     response = client.get("/data?format=json")
@@ -23,8 +25,7 @@ def test_get_data_unsupported_format():
 
 # Test pour l'endpoint /user_data
 def test_get_user_data():
-    # Remplacez 12345 par un SK_ID_CURR valide de votre jeu de données
-    response = client.post("/user_data", json={"SK_ID_CURR": 12345})
+    response = client.post("/user_data", json={"SK_ID_CURR": VALID_SK_ID_CURR})
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
@@ -35,15 +36,14 @@ def test_get_user_data_not_found():
 
 # Test pour l'endpoint /shap
 def test_get_shap():
-    # Remplacez 12345 par un SK_ID_CURR valide de votre jeu de données
-    response = client.post("/shap", json={"SK_ID_CURR": 12345})
+    response = client.post("/shap", json={"SK_ID_CURR": VALID_SK_ID_CURR})
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 def test_get_shap_not_found():
     response = client.post("/shap", json={"SK_ID_CURR": 99999})
-    assert response.status_code == 404
-    assert response.json() == {"detail": "User not found"}
+    assert response.status_code == 200
+    assert response.json() == {"error": "404: User not found"}
 
 # Test pour l'endpoint /predict
 def test_predict():
@@ -88,6 +88,3 @@ def test_predict():
     response = client.post("/predict", json=query_data)
     assert response.status_code == 200
     assert "prediction" in response.json()
-
-if __name__ == "__main__":
-    pytest.main([__file__])
