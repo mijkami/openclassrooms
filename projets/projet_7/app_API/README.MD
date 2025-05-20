@@ -43,11 +43,12 @@ sudo systemctl restart docker
 ### Tests
 
 # Exécution des tests
+pyenv virtualenvwrapper
 workon fastapi-env
-pytest tests/test_main.py
+pytest -v tests/
 
 # Exécuter un test spécifique
 pytest tests/test_main.py::test_get_data_parquet
 
-# Afficher plus d'infos
-pytest -v tests/
+# Afficher moins d'infos
+pytest tests/test_main.py
