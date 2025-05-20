@@ -88,7 +88,7 @@ async def get_SHAP(user: UserID):
 
         # Calculer les valeurs SHAP
         explainer = shap.Explainer(model)
-        shap_values = explainer(user_data.drop('TARGET', axis=1))
+        shap_values = explainer(user_data.drop(columns=['TARGET', 'SK_ID_CURR']))
 
         return shap_values.values.tolist()
     except Exception as e:
