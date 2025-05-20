@@ -25,42 +25,41 @@ class UserID(BaseModel):
 class QueryData(BaseModel):
     EXT_SOURCE_2: float
     EXT_SOURCE_3: float
-    DAYS_EMPLOYED: float
-    INSTAL_DPD_MEAN: float
-    CODE_GENDER: float
     PAYMENT_RATE: float
+    INSTAL_DPD_MEAN: float
+    INSTAL_AMT_PAYMENT_SUM: float
+    AMT_ANNUITY: float
+    DAYS_BIRTH: int
+    CODE_GENDER: int
+    ANNUITY_INCOME_PERC: float
+    APPROVED_AMT_DOWN_PAYMENT_MAX: float
     DAYS_EMPLOYED_PERC: float
-    DAYS_BIRTH: float
+    BURO_DAYS_CREDIT_MEAN: float
     PREV_CNT_PAYMENT_MEAN: float
     AMT_GOODS_PRICE: float
-    AMT_ANNUITY: float
-    ANNUITY_INCOME_PERC: float
-    INSTAL_AMT_PAYMENT_SUM: float
-    APPROVED_AMT_DOWN_PAYMENT_MAX: float
     BURO_AMT_CREDIT_SUM_DEBT_MEAN: float
-    NAME_EDUCATION_TYPE_Highereducation: float
-    AMT_CREDIT: float
     ACTIVE_DAYS_CREDIT_MAX: float
-    BURO_DAYS_CREDIT_MEAN: float
-    PREV_APP_CREDIT_PERC_MEAN: float
-    INSTAL_PAYMENT_DIFF_MEAN: float
-    POS_MONTHS_BALANCE_SIZE: float
-    APPROVED_CNT_PAYMENT_MEAN: float
-    DAYS_ID_PUBLISH: float
-    APPROVED_AMT_ANNUITY_MEAN: float
-    ACTIVE_DAYS_CREDIT_ENDDATE_MAX: float
-    BURO_DAYS_CREDIT_MAX: float
-    TOTALAREA_MODE: float
-    INSTAL_PAYMENT_PERC_MEAN: float
-    INSTAL_DAYS_ENTRY_PAYMENT_MEAN: float
-    PREV_APP_CREDIT_PERC_MIN: float
-    INSTAL_AMT_PAYMENT_MIN: float
-    BURO_CREDIT_ACTIVE_Closed_MEAN: float
-    DAYS_REGISTRATION: float
-    APPROVED_AMT_ANNUITY_MAX: float
-    INSTAL_AMT_PAYMENT_MEAN: float
     ACTIVE_DAYS_CREDIT_ENDDATE_MEAN: float
-    
+    PREV_APP_CREDIT_PERC_MEAN: float
+    INSTAL_PAYMENT_PERC_MEAN: float
+    NAME_EDUCATION_TYPE_Highereducation: int
+    DAYS_ID_PUBLISH: int
+    APPROVED_CNT_PAYMENT_MEAN: float
+    BURO_DAYS_CREDIT_MAX: float
+    INSTAL_AMT_PAYMENT_MIN: float
+    INSTAL_DAYS_ENTRY_PAYMENT_SUM: float
+    POS_MONTHS_BALANCE_SIZE: float
+    PREV_NAME_CONTRACT_STATUS_Refused_MEAN: float
+    DAYS_REGISTRATION: float
+    PREV_APP_CREDIT_PERC_MIN: float
+    APPROVED_DAYS_DECISION_MIN: float
+    INSTAL_AMT_PAYMENT_MEAN: float
+    INSTAL_DBD_SUM: float
+    INSTAL_AMT_INSTALMENT_MAX: float
+    INCOME_CREDIT_PERC: float
+    INSTAL_DAYS_ENTRY_PAYMENT_MEAN: float
+    INSTAL_PAYMENT_DIFF_MEAN: float
+
 
 @app.get("/data")
 async def get_data(format: str = 'parquet'):
@@ -78,22 +77,6 @@ async def get_user_data(user: UserID):
     if user_data.empty:
         raise HTTPException(status_code=404, detail="User not found")
     return user_data.to_dict(orient='records')
-
-
-@app.post("/shap")
-async def get_SHAP(user: UserID):
-    try:
-        user_data = data[data['SK_ID_CURR'] == user.SK_ID_CURR]
-        if user_data.empty:
-            raise HTTPException(status_code=404, detail="User not found")
-
-        # Calculer les valeurs SHAP
-        explainer = shap.Explainer(model)
-        shap_values = explainer(user_data.drop('TARGET', axis=1))
-
-        return shap_values.values.tolist()
-    except Exception as e:
-        return {"error": str(e)}
     
     
 @app.post("/shap")
@@ -117,26 +100,48 @@ async def get_SHAP(user: UserID):
 @app.post("/predict")
 async def predict(query: QueryData):
     try:
-        print(f"Received query data: {query}")
         # Convertir les données de la requête en un format adapté au modèle
         input_data = [[
-            query.EXT_SOURCE_2, query.EXT_SOURCE_3, query.DAYS_EMPLOYED,
-            query.INSTAL_DPD_MEAN, query.CODE_GENDER, query.PAYMENT_RATE,
-            query.DAYS_EMPLOYED_PERC, query.DAYS_BIRTH, query.PREV_CNT_PAYMENT_MEAN,
-            query.AMT_GOODS_PRICE, query.AMT_ANNUITY, query.ANNUITY_INCOME_PERC,
-            query.INSTAL_AMT_PAYMENT_SUM, query.APPROVED_AMT_DOWN_PAYMENT_MAX,
-            query.BURO_AMT_CREDIT_SUM_DEBT_MEAN, query.NAME_EDUCATION_TYPE_Highereducation,
-            query.AMT_CREDIT, query.ACTIVE_DAYS_CREDIT_MAX, query.BURO_DAYS_CREDIT_MEAN,
-            query.PREV_APP_CREDIT_PERC_MEAN, query.INSTAL_PAYMENT_DIFF_MEAN,
-            query.POS_MONTHS_BALANCE_SIZE, query.APPROVED_CNT_PAYMENT_MEAN,
-            query.DAYS_ID_PUBLISH, query.APPROVED_AMT_ANNUITY_MEAN,
-            query.ACTIVE_DAYS_CREDIT_ENDDATE_MAX, query.BURO_DAYS_CREDIT_MAX,
-            query.TOTALAREA_MODE, query.INSTAL_PAYMENT_PERC_MEAN,
-            query.INSTAL_DAYS_ENTRY_PAYMENT_MEAN, query.PREV_APP_CREDIT_PERC_MIN,
-            query.INSTAL_AMT_PAYMENT_MIN, query.BURO_CREDIT_ACTIVE_Closed_MEAN,
-            query.DAYS_REGISTRATION, query.APPROVED_AMT_ANNUITY_MAX,
-            query.INSTAL_AMT_PAYMENT_MEAN, query.ACTIVE_DAYS_CREDIT_ENDDATE_MEAN
+            query.EXT_SOURCE_2,
+            query.EXT_SOURCE_3,
+            query.PAYMENT_RATE,
+            query.INSTAL_DPD_MEAN,
+            query.INSTAL_AMT_PAYMENT_SUM,
+            query.AMT_ANNUITY,
+            query.DAYS_BIRTH,
+            query.CODE_GENDER,
+            query.ANNUITY_INCOME_PERC,
+            query.APPROVED_AMT_DOWN_PAYMENT_MAX,
+            query.DAYS_EMPLOYED_PERC,
+            query.BURO_DAYS_CREDIT_MEAN,
+            query.PREV_CNT_PAYMENT_MEAN,
+            query.AMT_GOODS_PRICE,
+            query.BURO_AMT_CREDIT_SUM_DEBT_MEAN,
+            query.ACTIVE_DAYS_CREDIT_MAX,
+            query.ACTIVE_DAYS_CREDIT_ENDDATE_MEAN,
+            query.PREV_APP_CREDIT_PERC_MEAN,
+            query.INSTAL_PAYMENT_PERC_MEAN,
+            query.NAME_EDUCATION_TYPE_Highereducation,
+            query.DAYS_ID_PUBLISH,
+            query.APPROVED_CNT_PAYMENT_MEAN,
+            query.BURO_DAYS_CREDIT_MAX,
+            query.INSTAL_AMT_PAYMENT_MIN,
+            query.INSTAL_DAYS_ENTRY_PAYMENT_SUM,
+            query.POS_MONTHS_BALANCE_SIZE,
+            query.PREV_NAME_CONTRACT_STATUS_Refused_MEAN,
+            query.DAYS_REGISTRATION,
+            query.PREV_APP_CREDIT_PERC_MIN,
+            query.APPROVED_DAYS_DECISION_MIN,
+            query.INSTAL_AMT_PAYMENT_MEAN,
+            query.INSTAL_DBD_SUM,
+            query.INSTAL_AMT_INSTALMENT_MAX,
+            query.INCOME_CREDIT_PERC,
+            query.INSTAL_DAYS_ENTRY_PAYMENT_MEAN,
+            query.INSTAL_PAYMENT_DIFF_MEAN
         ]]
+
+        # Log the number of features
+        print(f"Number of features in input data: {len(input_data[0])}")
 
         # Faire une prédiction avec le modèle
         prediction = model.predict(input_data)
