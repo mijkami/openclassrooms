@@ -16,3 +16,15 @@ docker buildx build -t fastapi-app --load .
 
 # exécuter conteneur docker
 docker run -p 8000:8000 fastapi-app
+
+
+
+
+
+# après changements, re-build et exécuter si besoin
+docker build -t fastapi-app .
+docker run -p 8000:8000 fastapi-app
+
+
+# si probleme daemon port utilisé : 
+sudo systemctl restart docker

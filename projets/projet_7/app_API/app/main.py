@@ -1,16 +1,17 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 import pandas as pd
 import pickle
 import shap
 from pydantic import BaseModel
 from typing import List
+import traceback
 
 # Charger le modèle
 with open('model.pkl', 'rb') as file:
     model = pickle.load(file)
     
 # Charger les données 
-data = pd.read_parquet('/data/data.parquet.gzip')  
+data = pd.read_parquet('/app/data/data.parquet.gzip')
 #data = pd.read_csv('data.csv')
 
 # Initialiser l'application FastAPI
@@ -70,6 +71,7 @@ async def get_data(format: str = 'parquet'):
     else:
         raise HTTPException(status_code=400, detail="Format not supported")
 
+
 @app.post("/user_data")
 async def get_user_data(user: UserID):
     user_data = data[data['SK_ID_CURR'] == user.SK_ID_CURR]
@@ -77,41 +79,69 @@ async def get_user_data(user: UserID):
         raise HTTPException(status_code=404, detail="User not found")
     return user_data.to_dict(orient='records')
 
+
 @app.post("/shap")
 async def get_SHAP(user: UserID):
-    user_data = data[data['SK_ID_CURR'] == user.SK_ID_CURR]
-    if user_data.empty:
-        raise HTTPException(status_code=404, detail="User not found")
+    try:
+        user_data = data[data['SK_ID_CURR'] == user.SK_ID_CURR]
+        if user_data.empty:
+            raise HTTPException(status_code=404, detail="User not found")
 
-    # Calculer les valeurs SHAP
-    explainer = shap.Explainer(model)
-    shap_values = explainer(user_data.drop('TARGET', axis=1))
+        # Calculer les valeurs SHAP
+        explainer = shap.Explainer(model)
+        shap_values = explainer(user_data.drop('TARGET', axis=1))
 
-    return shap_values.values.tolist()
+        return shap_values.values.tolist()
+    except Exception as e:
+        return {"error": str(e)}
+    
+    
+@app.post("/shap")
+async def get_SHAP(user: UserID):
+    try:
+        user_data = data[data['SK_ID_CURR'] == user.SK_ID_CURR]
+        if user_data.empty:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        # Calculer les valeurs SHAP
+        explainer = shap.Explainer(model)
+        shap_values = explainer(user_data.drop('TARGET', axis=1))
+
+        return shap_values.values.tolist()
+    except Exception as e:
+        # Log the full traceback for debugging
+        traceback.print_exc()
+        return {"error": str(e)}
 
 
 @app.post("/predict")
 async def predict(query: QueryData):
-    # Convertir les données de la requête en un format adapté au modèle
-    input_data = [[
-        query.EXT_SOURCE_2, query.EXT_SOURCE_3, query.DAYS_EMPLOYED,
-        query.INSTAL_DPD_MEAN, query.CODE_GENDER, query.PAYMENT_RATE,
-        query.DAYS_EMPLOYED_PERC, query.DAYS_BIRTH, query.PREV_CNT_PAYMENT_MEAN,
-        query.AMT_GOODS_PRICE, query.AMT_ANNUITY, query.ANNUITY_INCOME_PERC,
-        query.INSTAL_AMT_PAYMENT_SUM, query.APPROVED_AMT_DOWN_PAYMENT_MAX,
-        query.BURO_AMT_CREDIT_SUM_DEBT_MEAN, query.NAME_EDUCATION_TYPE_Highereducation,
-        query.AMT_CREDIT, query.ACTIVE_DAYS_CREDIT_MAX, query.BURO_DAYS_CREDIT_MEAN,
-        query.PREV_APP_CREDIT_PERC_MEAN, query.INSTAL_PAYMENT_DIFF_MEAN,
-        query.POS_MONTHS_BALANCE_SIZE, query.APPROVED_CNT_PAYMENT_MEAN,
-        query.DAYS_ID_PUBLISH, query.APPROVED_AMT_ANNUITY_MEAN,
-        query.ACTIVE_DAYS_CREDIT_ENDDATE_MAX, query.BURO_DAYS_CREDIT_MAX,
-        query.TOTALAREA_MODE, query.INSTAL_PAYMENT_PERC_MEAN,
-        query.INSTAL_DAYS_ENTRY_PAYMENT_MEAN, query.PREV_APP_CREDIT_PERC_MIN,
-        query.INSTAL_AMT_PAYMENT_MIN, query.BURO_CREDIT_ACTIVE_Closed_MEAN,
-        query.DAYS_REGISTRATION, query.APPROVED_AMT_ANNUITY_MAX,
-        query.INSTAL_AMT_PAYMENT_MEAN, query.ACTIVE_DAYS_CREDIT_ENDDATE_MEAN
-    ]]
+    try:
+        print(f"Received query data: {query}")
+        # Convertir les données de la requête en un format adapté au modèle
+        input_data = [[
+            query.EXT_SOURCE_2, query.EXT_SOURCE_3, query.DAYS_EMPLOYED,
+            query.INSTAL_DPD_MEAN, query.CODE_GENDER, query.PAYMENT_RATE,
+            query.DAYS_EMPLOYED_PERC, query.DAYS_BIRTH, query.PREV_CNT_PAYMENT_MEAN,
+            query.AMT_GOODS_PRICE, query.AMT_ANNUITY, query.ANNUITY_INCOME_PERC,
+            query.INSTAL_AMT_PAYMENT_SUM, query.APPROVED_AMT_DOWN_PAYMENT_MAX,
+            query.BURO_AMT_CREDIT_SUM_DEBT_MEAN, query.NAME_EDUCATION_TYPE_Highereducation,
+            query.AMT_CREDIT, query.ACTIVE_DAYS_CREDIT_MAX, query.BURO_DAYS_CREDIT_MEAN,
+            query.PREV_APP_CREDIT_PERC_MEAN, query.INSTAL_PAYMENT_DIFF_MEAN,
+            query.POS_MONTHS_BALANCE_SIZE, query.APPROVED_CNT_PAYMENT_MEAN,
+            query.DAYS_ID_PUBLISH, query.APPROVED_AMT_ANNUITY_MEAN,
+            query.ACTIVE_DAYS_CREDIT_ENDDATE_MAX, query.BURO_DAYS_CREDIT_MAX,
+            query.TOTALAREA_MODE, query.INSTAL_PAYMENT_PERC_MEAN,
+            query.INSTAL_DAYS_ENTRY_PAYMENT_MEAN, query.PREV_APP_CREDIT_PERC_MIN,
+            query.INSTAL_AMT_PAYMENT_MIN, query.BURO_CREDIT_ACTIVE_Closed_MEAN,
+            query.DAYS_REGISTRATION, query.APPROVED_AMT_ANNUITY_MAX,
+            query.INSTAL_AMT_PAYMENT_MEAN, query.ACTIVE_DAYS_CREDIT_ENDDATE_MEAN
+        ]]
 
-    # Faire une prédiction avec le modèle
-    prediction = model.predict(input_data)
-    return {"prediction": prediction.tolist()}
+        # Faire une prédiction avec le modèle
+        prediction = model.predict(input_data)
+        return {"prediction": prediction.tolist()}
+    except Exception as e:
+        # Log the full traceback for debugging
+        traceback.print_exc()
+        return {"error": str(e)}
