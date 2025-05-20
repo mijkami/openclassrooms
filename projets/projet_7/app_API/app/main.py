@@ -6,9 +6,17 @@ from typing import List
 # Charger le modèle
 with open('model.pkl', 'rb') as file:
     model = pickle.load(file)
+    
+# Charger les données 
+data = pd.read_parquet('data.parquet')  
+#data = pd.read_csv('data.csv')
 
 # Initialiser l'application FastAPI
 app = FastAPI()
+
+# Modèle de données pour la requête
+class UserID(BaseModel):
+    SK_ID_CURR: int
 
 # Définir le modèle de données pour la requête
 class QueryData(BaseModel):
@@ -49,6 +57,36 @@ class QueryData(BaseModel):
     APPROVED_AMT_ANNUITY_MAX: float
     INSTAL_AMT_PAYMENT_MEAN: float
     ACTIVE_DAYS_CREDIT_ENDDATE_MEAN: float
+    
+
+@app.get("/data")
+async def get_data(format: str = 'parquet'):
+    if format == 'parquet':
+        return Response(content=data.to_parquet(), media_type="application/octet-stream")
+    elif format == 'csv':
+        return Response(content=data.to_csv(index=False), media_type="text/csv")
+    else:
+        raise HTTPException(status_code=400, detail="Format not supported")
+
+@app.post("/user_data")
+async def get_user_data(user: UserID):
+    user_data = data[data['SK_ID_CURR'] == user.SK_ID_CURR]
+    if user_data.empty:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user_data.to_dict(orient='records')
+
+@app.post("/shap")
+async def get_SHAP(user: UserID):
+    user_data = data[data['SK_ID_CURR'] == user.SK_ID_CURR]
+    if user_data.empty:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Calculer les valeurs SHAP
+    explainer = shap.Explainer(model)
+    shap_values = explainer(user_data.drop('TARGET', axis=1))
+
+    return shap_values.values.tolist()
+
 
 @app.post("/predict")
 async def predict(query: QueryData):
