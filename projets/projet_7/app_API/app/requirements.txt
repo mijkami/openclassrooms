@@ -1,4 +1,8 @@
 fastapi
 uvicorn
+pandas
 scikit-learn
+lightgbm
+shap
 pytest
+pyarrow

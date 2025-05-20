@@ -1,5 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+import pandas as pd
 import pickle
+import shap
 from pydantic import BaseModel
 from typing import List
 
@@ -8,7 +10,7 @@ with open('model.pkl', 'rb') as file:
     model = pickle.load(file)
     
 # Charger les données 
-data = pd.read_parquet('data.parquet')  
+data = pd.read_parquet('/data/data.parquet.gzip')  
 #data = pd.read_csv('data.csv')
 
 # Initialiser l'application FastAPI
