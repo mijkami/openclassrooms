@@ -6,6 +6,7 @@ import io
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial.distance import euclidean
+import shap
 
 # Configuration de l'API
 API_BASE_URL = "http://127.0.0.1:8000/"
@@ -155,13 +156,20 @@ if data is not None:
         shap_data = fetch_data('/shap', params={'SK_ID_CURR': user_id})
         if shap_data is not None:
             st.write(f"Données SHAP pour l'utilisateur {user_id} :")
-            # Afficher les valeurs SHAP sous forme d'histogramme
-            shap_df = pd.DataFrame(shap_data[0], index=[0])
+
+            # Extraire les valeurs SHAP et les noms des caractéristiques
+            shap_values = np.array([list(shap_data[0].values())])
+            feature_names = list(shap_data[0].keys())
+            expected_values = np.zeros(len(feature_names))  # Vous pouvez remplacer cela par les valeurs de base réelles si disponibles
+
+            # Créer un objet Explanation de SHAP
+            expl = shap.Explanation(values=shap_values,
+                                    base_values=expected_values,
+                                    feature_names=feature_names)
+
+            # Visualiser les valeurs SHAP
             fig, ax = plt.subplots()
-            shap_df.T.plot(kind='bar', legend=False, ax=ax)
-            ax.set_title("Valeurs SHAP")
-            ax.set_xlabel("Caractéristiques")
-            ax.set_ylabel("Valeurs SHAP")
+            shap.plots.bar(expl, show=False)
             st.pyplot(fig)
             
         
