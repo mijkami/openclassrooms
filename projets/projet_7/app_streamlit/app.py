@@ -49,20 +49,25 @@ def calculate_distance(user1, user2, features):
 # Interface Streamlit
 st.title("Dashboard Utilisateur")
 
+# Initialiser current_page dans st.session_state s'il n'existe pas
+if 'current_page' not in st.session_state:
+    st.session_state.current_page = 0
+
 # Chargement des données
 data = fetch_data('/data')
 if data is not None:
+    st.subheader("Données générales :")
     # Réorganiser les colonnes pour afficher SK_ID_CURR et TARGET en premier
     cols = ['SK_ID_CURR', 'TARGET'] + [col for col in data.columns if col not in ['SK_ID_CURR', 'TARGET']]
     data = data[cols]
-    
+
     # Selectbox pour choisir la quantité de lignes affichées
     page_size_options = [10, 15, 20, 25, 30]
     page_size = st.selectbox("Sélectionnez le nombre de lignes à afficher", page_size_options)
 
     # Pagination
     total_pages = len(data) // page_size + (1 if len(data) % page_size else 0)
-    current_page = st.session_state.get('current_page', 0)
+    current_page = st.session_state.current_page
 
     # Boutons pour naviguer entre les pages
     col1, col2, col3 = st.columns([1, 1, 1])
@@ -78,7 +83,6 @@ if data is not None:
     start_idx = current_page * page_size
     end_idx = start_idx + page_size
 
-    st.write("Données des utilisateurs :")
     # Utiliser un tableau cliquable pour sélectionner un utilisateur
     styled_data = data.iloc[start_idx:end_idx].style.background_gradient(cmap='coolwarm', subset=pd.IndexSlice[:, data.columns.difference(['SK_ID_CURR'])])
     st.dataframe(styled_data)
@@ -87,6 +91,7 @@ if data is not None:
     data['SK_ID_CURR'] = data['SK_ID_CURR'].astype(int)
 
     # Sélection d'un utilisateur
+    st.subheader("Données spécifiques :")
     user_id = st.selectbox("Sélectionnez un utilisateur", data['SK_ID_CURR'])
 
     # Affichage des données de l'utilisateur sélectionné
@@ -123,7 +128,7 @@ if data is not None:
         payment_rate = user_features['PAYMENT_RATE']
 
         # Définir une marge pour la similarité
-        margin = 0.1
+        margin = 0.05
         similar_users = data[
             (data['TARGET'] == 1) &
             (abs(data['EXT_SOURCE_2'] - ext_source_2) <= margin) &
@@ -131,9 +136,10 @@ if data is not None:
             (abs(data['PAYMENT_RATE'] - payment_rate) <= margin) 
         ]
 
-        # Échantillonnage de 200 utilisateurs
-        if len(similar_users) > 200:
-            similar_users = similar_users.sample(200)
+        # Échantillonnage d' utilisateurs
+        sample_size = 400
+        if len(similar_users) > sample_size:
+            similar_users = similar_users.sample(sample_size)
 
         similar_users['distance'] = similar_users.apply(lambda row: calculate_distance(user_features, row[features], features), axis=1)
         similar_users = similar_users.nsmallest(5, 'distance')
@@ -157,3 +163,5 @@ if data is not None:
             ax.set_xlabel("Caractéristiques")
             ax.set_ylabel("Valeurs SHAP")
             st.pyplot(fig)
+            
+        
