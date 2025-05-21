@@ -10,6 +10,7 @@ import traceback
 # Charger les variables d'environnement
 MODEL_PATH = os.getenv('MODEL_PATH', 'app/model.pkl')
 DATA_PATH = os.getenv('DATA_PATH', 'data/data.parquet.gzip')
+DATA_TEST_PATH = os.getenv('DATA_TEST_PATH', 'data/test_df_cleaned.parquet.gzip')
 
 # Charger le modèle
 with open(MODEL_PATH, 'rb') as file:
@@ -17,7 +18,7 @@ with open(MODEL_PATH, 'rb') as file:
     
 # Charger les données
 data = pd.read_parquet(DATA_PATH)
-#data = pd.read_csv('data.csv')
+data_test = pd.read_parquet(DATA_TEST_PATH)
 
 # Initialiser l'application FastAPI
 app = FastAPI()
@@ -72,6 +73,15 @@ async def get_data(format: str = 'parquet'):
         return Response(content=data.to_parquet(), media_type="application/octet-stream")
     elif format == 'csv':
         return Response(content=data.to_csv(index=False), media_type="text/csv")
+    else:
+        raise HTTPException(status_code=400, detail="Format not supported")
+    
+@app.get("/data_test")
+async def get_data_test(format: str = 'parquet'):
+    if format == 'parquet':
+        return Response(content=data_test.to_parquet(), media_type="application/octet-stream")
+    elif format == 'csv':
+        return Response(content=data_test.to_csv(index=False), media_type="text/csv")
     else:
         raise HTTPException(status_code=400, detail="Format not supported")
 

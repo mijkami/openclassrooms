@@ -22,6 +22,22 @@ def test_get_data_unsupported_format():
     response = client.get("/data?format=json")
     assert response.status_code == 400
     assert response.json() == {"detail": "Format not supported"}
+    
+# Test pour l'endpoint /data_test
+def test_get_data_test_parquet():
+    response = client.get("/data_test?format=parquet")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "application/octet-stream"
+
+def test_get_data_test_csv():
+    response = client.get("/data_test?format=csv")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "text/csv; charset=utf-8"
+
+def test_get_data_test_unsupported_format():
+    response = client.get("/data_test?format=json")
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Format not supported"}
 
 # Test pour l'endpoint /user_data
 def test_get_user_data():
