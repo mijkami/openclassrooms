@@ -60,6 +60,21 @@ def test_get_shap_not_found():
     response = client.post("/shap", json={"SK_ID_CURR": 99999})
     assert response.status_code == 200
     assert response.json() == {"error": "404: User not found"}
+    
+def test_get_shap():
+    response = client.post("/shap", json={"SK_ID_CURR": VALID_SK_ID_CURR})
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+    assert len(response.json()) > 0
+    for item in response.json():
+        assert isinstance(item, dict)
+        for key, value in item.items():
+            assert isinstance(value, (int, float))
+
+def test_get_shap_not_found():
+    response = client.post("/shap", json={"SK_ID_CURR": 99999})
+    assert response.status_code == 200
+    assert response.json() == {"error": "404: User not found"}
 
 # Test pour l'endpoint /predict
 def test_predict():

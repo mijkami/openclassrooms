@@ -104,8 +104,15 @@ async def get_SHAP(user: UserID):
         # Calculer les valeurs SHAP
         explainer = shap.Explainer(model)
         shap_values = explainer(user_data.drop(columns=['TARGET', 'SK_ID_CURR']))
+        feature_names = shap_values.feature_names
 
-        return shap_values.values.tolist()
+        # Convertir les valeurs SHAP en une liste de dictionnaires avec les noms des colonnes
+        shap_values_list = shap_values.values.tolist()
+        shap_values_with_names = [
+            {feature_names[i]: value for i, value in enumerate(shap_values_list[0])}
+        ]
+
+        return shap_values_with_names
     except Exception as e:
         # Log the full traceback for debugging
         traceback.print_exc()
