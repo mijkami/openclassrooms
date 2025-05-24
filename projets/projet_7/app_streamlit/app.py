@@ -47,7 +47,7 @@ if data is not None:
     df = pd.read_parquet(BytesIO(data))
 
 # Interface utilisateur
-st.title("Dashboard de Prédiction")
+st.title("Dashboard Client")
 
 # Sélection de l'utilisateur
 sk_id_curr = st.selectbox("Sélectionnez un ID client", df["SK_ID_CURR"].unique())
@@ -80,10 +80,10 @@ if st.button("Lancer la prédiction"):
                 updated_user_data[col] = cols[i % 3].text_input(col, user_data[col], key=f"{col}_{i}_pred")
 
     prediction = predict(updated_user_data.to_dict())
-    st.write(f"Prédiction: {prediction}")
+    st.write(f"Prédiction: {int(prediction['prediction'][0])}")
 
 # Affichage des données SHAP
-st.subheader("Données SHAP")
+st.subheader("Importance des variables client (SHAP)")
 shap_data = fetch_shap_data(sk_id_curr)
 if shap_data is not None:
     # Extraire les valeurs SHAP et les noms des caractéristiques
