@@ -32,6 +32,19 @@ def fetch_shap_data(sk_id_curr):
         st.error(f"Exception lors de la récupération des données SHAP: {e}")
         return None
 
+# Fonction pour récupérer les données SHAP avec données d'entrée modifiées
+def fetch_shap_by_input(data):
+    try:
+        response = requests.post(f"{API_BASE_URL}shap_by_input", json=data)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            st.error(f"Erreur lors de la récupération des données SHAP: {response.status_code} - {response.text}")
+            return None
+    except Exception as e:
+        st.error(f"Exception lors de la récupération des données SHAP: {e}")
+        return None
+
 # Fonction pour faire une prédiction
 def predict(data):
     response = requests.post(f"{API_BASE_URL}predict", json=data)
@@ -100,11 +113,21 @@ if st.button("Lancer la prédiction"):
     # Stocker l'état de la prédiction
     st.session_state.prediction_done = True
 
+    # Appeler /shap_by_input si les champs modifiables sont affichés
+    if show_fields:
+        shap_by_input_data = fetch_shap_by_input(updated_user_data.to_dict())
+        if shap_by_input_data is not None:
+            st.session_state.shap_by_input_data = shap_by_input_data
+
 # Affichage des données SHAP et des distributions des variables uniquement après la prédiction
 if 'prediction_done' in st.session_state and st.session_state.prediction_done:
     # Affichage des données SHAP
     st.subheader("Importance des variables client (SHAP)")
-    shap_data = fetch_shap_data(sk_id_curr)
+    if show_fields and 'shap_by_input_data' in st.session_state:
+        shap_data = st.session_state.shap_by_input_data
+    else:
+        shap_data = fetch_shap_data(sk_id_curr)
+
     if shap_data is not None:
         # Extraire les valeurs SHAP et les noms des caractéristiques
         shap_values = np.array([list(shap_data[0].values())])
@@ -131,6 +154,7 @@ if 'prediction_done' in st.session_state and st.session_state.prediction_done:
             shap.summary_plot(shap_values, user_data_df, plot_type="bar")
             st.pyplot(plt.gcf())
             plt.close()
+
 
         # Trier les variables par importance SHAP
         shap_importance = pd.Series(shap_values[0], index=feature_names).abs().sort_values(ascending=False)
