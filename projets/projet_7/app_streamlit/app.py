@@ -131,8 +131,12 @@ if simple_mode:
     # Menu de sélection pour choisir les variables à afficher
     selected_vars = st.multiselect("Sélectionnez les variables à afficher",
                                   options=top_variables,
-                                  default=top_variables[:3])
+                                  default=top_variables[:4])
 else:
+    # Initialiser display_mode dans st.session_state s'il n'existe pas
+    if 'display_mode' not in st.session_state:
+        st.session_state.display_mode = "far_from_median"  # ou une autre valeur par défaut
+
     # Ajouter un slider pour choisir le nombre de variables à afficher
     max_n_variables = len(top_variables) if 'top_variables' in locals() else 3
     n_variables = st.slider("Nombre de variables à afficher", min_value=3, max_value=max_n_variables, value=3)
