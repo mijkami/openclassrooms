@@ -1,175 +1,171 @@
 import streamlit as st
-import pandas as pd
 import requests
-import pyarrow.parquet as pq
-import io
+import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
-from scipy.spatial.distance import euclidean
 import shap
+from io import BytesIO
+import numpy as np
 
 # Configuration de l'API
 API_BASE_URL = "http://127.0.0.1:8000/"
 
 # Fonction pour récupérer les données de l'API
-def fetch_data(endpoint, params=None):
-    # Utiliser la méthode HTTP correcte pour chaque point de terminaison
-    if endpoint == '/data':
-        response = requests.get(f"{API_BASE_URL}{endpoint}", params=params)
-    elif endpoint == '/user_data':
-        response = requests.post(f"{API_BASE_URL}{endpoint}", json=params)  # Utiliser POST pour /user_data
-    elif endpoint == '/shap':
-        response = requests.post(f"{API_BASE_URL}{endpoint}", json=params)  # Utiliser POST pour /shap
-    else:
-        response = requests.get(f"{API_BASE_URL}{endpoint}", params=params)
-
+def fetch_data(endpoint):
+    response = requests.get(f"{API_BASE_URL}{endpoint}")
     if response.status_code == 200:
-        if endpoint == '/data':
-            return pq.read_table(io.BytesIO(response.content)).to_pandas()
-        elif endpoint == '/shap':
-            return response.json()
-        else:
-            return response.json()
+        return response.content
     else:
-        st.error(f"Error fetching data: {response.status_code}")
+        st.error("Erreur lors de la récupération des données")
         return None
 
-# Fonction pour envoyer une prédiction
+# Fonction pour récupérer les données SHAP d'un utilisateur
+def fetch_shap_data(sk_id_curr):
+    try:
+        # Envoyer une requête POST avec le SK_ID_CURR
+        response = requests.post(f"{API_BASE_URL}shap", json={"SK_ID_CURR": int(sk_id_curr)})
+        if response.status_code == 200:
+            return response.json()
+        else:
+            st.error(f"Erreur lors de la récupération des données SHAP: {response.status_code} - {response.text}")
+            return None
+    except Exception as e:
+        st.error(f"Exception lors de la récupération des données SHAP: {e}")
+        return None
+
+# Fonction pour faire une prédiction
 def predict(data):
-    response = requests.post(f"{API_BASE_URL}/predict", json=data)
+    response = requests.post(f"{API_BASE_URL}predict", json=data)
     if response.status_code == 200:
         return response.json()
     else:
-        st.error(f"Error making prediction: {response.status_code}")
+        st.error("Erreur lors de la prédiction")
         return None
 
-# Fonction pour calculer la distance euclidienne entre deux utilisateurs
-def calculate_distance(user1, user2, features):
-    return euclidean(user1[features], user2[features])
-
-# Interface Streamlit
-st.title("Dashboard Utilisateur")
-
-# Initialiser current_page dans st.session_state s'il n'existe pas
-if 'current_page' not in st.session_state:
-    st.session_state.current_page = 0
-
 # Chargement des données
-data = fetch_data('/data')
+data = fetch_data("data")
 if data is not None:
-    st.subheader("Données générales :")
-    # Réorganiser les colonnes pour afficher SK_ID_CURR et TARGET en premier
-    cols = ['SK_ID_CURR', 'TARGET'] + [col for col in data.columns if col not in ['SK_ID_CURR', 'TARGET']]
-    data = data[cols]
+    df = pd.read_parquet(BytesIO(data))
 
-    # Selectbox pour choisir la quantité de lignes affichées
-    page_size_options = [10, 15, 20, 25, 30]
-    page_size = st.selectbox("Sélectionnez le nombre de lignes à afficher", page_size_options)
+# Interface utilisateur
+st.title("Dashboard de Prédiction")
 
-    # Pagination
-    total_pages = len(data) // page_size + (1 if len(data) % page_size else 0)
-    current_page = st.session_state.current_page
+# Sélection de l'utilisateur
+sk_id_curr = st.selectbox("Sélectionnez un ID client", df["SK_ID_CURR"].unique())
 
-    # Boutons pour naviguer entre les pages
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col1:
-        if st.button("Précédent") and current_page > 0:
-            st.session_state.current_page -= 1
-    with col2:
-        st.write(f"Page {current_page + 1} / {total_pages}")
-    with col3:
-        if st.button("Suivant") and current_page < total_pages - 1:
-            st.session_state.current_page += 1
+# Chargement des données de l'utilisateur sélectionné
+user_data = df[df["SK_ID_CURR"] == sk_id_curr].iloc[0]
 
-    start_idx = current_page * page_size
-    end_idx = start_idx + page_size
+# Checkbox pour afficher ou cacher les champs modifiables
+show_fields = st.checkbox("Afficher les champs modifiables")
 
-    # Utiliser un tableau cliquable pour sélectionner un utilisateur
-    styled_data = data.iloc[start_idx:end_idx].style.background_gradient(cmap='coolwarm', subset=pd.IndexSlice[:, data.columns.difference(['SK_ID_CURR'])])
-    st.dataframe(styled_data)
+if show_fields:
+    # Affichage des données de l'utilisateur
+    st.subheader("Données de l'utilisateur")
 
-    # Convertir SK_ID_CURR en int natif
-    data['SK_ID_CURR'] = data['SK_ID_CURR'].astype(int)
+    # Utilisation de colonnes pour afficher les champs de manière compacte
+    cols = st.columns(3)  # Crée 3 colonnes
+    for i, col in enumerate(df.columns):
+        if col != "SK_ID_CURR" and col != "TARGET":
+            # Utilise modulo pour répartir les champs dans les colonnes
+            user_data[col] = cols[i % 3].text_input(col, user_data[col], key=f"{col}_{i}")
 
-    # Sélection d'un utilisateur
-    st.subheader("Données spécifiques :")
-    user_id = st.selectbox("Sélectionnez un utilisateur", data['SK_ID_CURR'])
+# Bouton pour lancer la prédiction
+if st.button("Lancer la prédiction"):
+    # Mettre à jour user_data avec les nouvelles valeurs saisies par l'utilisateur
+    updated_user_data = user_data.copy()
+    if show_fields:
+        for i, col in enumerate(df.columns):
+            if col != "SK_ID_CURR" and col != "TARGET":
+                # Utiliser une clé unique pour chaque appel de st.text_input
+                updated_user_data[col] = cols[i % 3].text_input(col, user_data[col], key=f"{col}_{i}_pred")
 
-    # Affichage des données de l'utilisateur sélectionné
-    user_data = fetch_data('/user_data', params={'SK_ID_CURR': user_id})
-    if user_data is not None:
-        # Convertir user_data en DataFrame si ce n'est pas déjà le cas
-        if isinstance(user_data, list):
-            user_data = pd.DataFrame(user_data)
+    prediction = predict(updated_user_data.to_dict())
+    st.write(f"Prédiction: {prediction}")
 
-        # Réorganiser les colonnes pour afficher SK_ID_CURR et TARGET en premier
-        user_data_cols = ['SK_ID_CURR', 'TARGET'] + [col for col in user_data.columns if col not in ['SK_ID_CURR', 'TARGET']]
-        user_data = user_data[user_data_cols]
+# Affichage des données SHAP
+st.subheader("Données SHAP")
+shap_data = fetch_shap_data(sk_id_curr)
+if shap_data is not None:
+    # Extraire les valeurs SHAP et les noms des caractéristiques
+    shap_values = np.array([list(shap_data[0].values())])
+    feature_names = list(shap_data[0].keys())
+    expected_values = np.zeros(len(feature_names))  # Vous pouvez remplacer cela par les valeurs de base réelles si disponibles
 
-        st.write(f"Données de l'utilisateur {user_id} :")
-        styled_user_data = user_data.style.background_gradient(cmap='coolwarm', subset=pd.IndexSlice[:, user_data.columns.difference(['SK_ID_CURR'])])
-        st.dataframe(styled_user_data)
+    # Créer un objet Explanation de SHAP
+    expl = shap.Explanation(values=shap_values,
+                            base_values=expected_values,
+                            feature_names=feature_names)
 
-        # Prédiction
-        if st.button("Lancer la prédiction"):
-            user_data_df = pd.DataFrame(user_data)
-            prediction_data = user_data_df.drop(columns=['SK_ID_CURR', 'TARGET']).to_dict(orient='records')[0]
-            prediction = predict(prediction_data)
-            clean_prediction = int(prediction['prediction'][0])
-            if clean_prediction is not None:
-                st.write(f"Prédiction pour l'utilisateur {user_id} : {clean_prediction}")
+    # Visualiser les valeurs SHAP
+    fig, ax = plt.subplots()
+    shap.plots.bar(expl, show=False)
+    st.pyplot(fig)
 
-        # Comparaison avec des utilisateurs similaires
-        features = [col for col in data.columns if col not in ['SK_ID_CURR', 'TARGET']]
-        user_features = user_data[features].iloc[0]
+    # Ajouter un toggle pour afficher ou cacher l'intégralité du SHAP
+    show_full_shap = st.checkbox("Afficher l'intégralité du SHAP")
 
-        # Filtrer les utilisateurs ayant des valeurs proches pour EXT_SOURCE_2, EXT_SOURCE_3, PAYMENT_RATE, et INSTAL_DPD_MEAN
-        ext_source_2 = user_features['EXT_SOURCE_2']
-        ext_source_3 = user_features['EXT_SOURCE_3']
-        payment_rate = user_features['PAYMENT_RATE']
+    if show_full_shap:
+        # Assurez-vous que les dimensions des matrices shap_values et user_data correspondent
+        user_data_df = user_data.to_frame().T[feature_names]
+        plt.figure()
+        shap.summary_plot(shap_values, user_data_df, plot_type="bar")
+        st.pyplot(plt.gcf())
+        plt.close()
 
-        # Définir une marge pour la similarité
-        margin = 0.05
-        similar_users = data[
-            (data['TARGET'] == 1) &
-            (abs(data['EXT_SOURCE_2'] - ext_source_2) <= margin) &
-            (abs(data['EXT_SOURCE_3'] - ext_source_3) <= margin) &
-            (abs(data['PAYMENT_RATE'] - payment_rate) <= margin) 
-        ]
+    # Trier les variables par importance SHAP
+    shap_importance = pd.Series(shap_values[0], index=feature_names).abs().sort_values(ascending=False)
+    top_variables = shap_importance.index.tolist()
 
-        # Échantillonnage d' utilisateurs
-        sample_size = 400
-        if len(similar_users) > sample_size:
-            similar_users = similar_users.sample(sample_size)
+# Calculer la médiane et la distance à la médiane
+median = df.median()
+distance_from_median = np.abs(user_data - median)
+far_from_median = distance_from_median.sort_values(ascending=False).index.tolist()
 
-        similar_users['distance'] = similar_users.apply(lambda row: calculate_distance(user_features, row[features], features), axis=1)
-        similar_users = similar_users.nsmallest(5, 'distance')
+# Affichage des distributions des variables
+st.subheader("Positionnement du client par variable")
 
-        combined_data = pd.concat([user_data, similar_users], ignore_index=True)
-        combined_data_cols = ['SK_ID_CURR', 'TARGET'] + [col for col in combined_data.columns if col not in ['SK_ID_CURR', 'TARGET', 'distance']]
-        combined_data = combined_data[combined_data_cols]
-        st.write("Données de l'utilisateur sélectionné et d'utilisateurs similaires avec TARGET = 1 :")
-        styled_combined_data = combined_data.style.background_gradient(cmap='coolwarm', subset=pd.IndexSlice[:, combined_data.columns.difference(['SK_ID_CURR'])])
-        st.dataframe(styled_combined_data)
+# Ajouter un bouton pour basculer entre les modes
+simple_mode = st.checkbox("Mode manuel", value=True)
 
-        # Affichage des données SHAP
-        shap_data = fetch_data('/shap', params={'SK_ID_CURR': user_id})
-        if shap_data is not None:
-            st.write(f"Données SHAP pour l'utilisateur {user_id} :")
+if simple_mode:
+    # Menu de sélection pour choisir les variables à afficher
+    selected_vars = st.multiselect("Sélectionnez les variables à afficher",
+                                  options=top_variables,
+                                  default=top_variables[:3])
+else:
+    # Ajouter un slider pour choisir le nombre de variables à afficher
+    max_n_variables = len(top_variables) if 'top_variables' in locals() else 3
+    n_variables = st.slider("Nombre de variables à afficher", min_value=3, max_value=max_n_variables, value=3)
 
-            # Extraire les valeurs SHAP et les noms des caractéristiques
-            shap_values = np.array([list(shap_data[0].values())])
-            feature_names = list(shap_data[0].keys())
-            expected_values = np.zeros(len(feature_names))  # Vous pouvez remplacer cela par les valeurs de base réelles si disponibles
+    # Utiliser des colonnes pour afficher les boutons horizontalement
+    button_cols = st.columns(2)
+    with button_cols[0]:
+        if st.button("Afficher les variables éloignées de la médiane"):
+            st.session_state.display_mode = "far_from_median"
 
-            # Créer un objet Explanation de SHAP
-            expl = shap.Explanation(values=shap_values,
-                                    base_values=expected_values,
-                                    feature_names=feature_names)
+    with button_cols[1]:
+        if st.button("Afficher le top SHAP"):
+            st.session_state.display_mode = "top_shap"
 
-            # Visualiser les valeurs SHAP
-            fig, ax = plt.subplots()
-            shap.plots.bar(expl, show=False)
-            st.pyplot(fig)
-            
-        
+    # Afficher le mode d'affichage actuel
+    if st.session_state.display_mode == "far_from_median":
+        st.write("Top variables éloignées de la médiane")
+        selected_variables = [var for var in far_from_median[:n_variables] if var != "SK_ID_CURR"]
+    else:
+        st.write("Top variables du SHAP")
+        selected_variables = [var for var in top_variables[:n_variables] if var != "SK_ID_CURR"]
+
+# Utiliser deux colonnes pour afficher les distributions
+dist_cols = st.columns(2)
+if simple_mode:
+    selected_variables = selected_vars
+else:
+    selected_variables = selected_variables
+
+for i, var in enumerate(selected_variables):
+    fig, ax = plt.subplots(figsize=(6, 4))  # Créer une nouvelle figure et un axe
+    df[var].hist(ax=ax, bins=30)
+    ax.axvline(user_data[var], color='red', linestyle='dashed', linewidth=3)
+    ax.set_title(f"Distribution de {var}")  # Ajouter un titre à chaque graphique
+    dist_cols[i % 2].pyplot(fig)
+    plt.close(fig)  # Fermer la figure après utilisation
