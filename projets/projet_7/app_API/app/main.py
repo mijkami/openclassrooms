@@ -119,6 +119,74 @@ async def get_SHAP(user: UserID):
         return {"error": str(e)}
 
 
+@app.post("/shap_by_input")
+async def get_shap_by_input(query: QueryData):
+    try:
+        # Log ou impression pour vérifier les données d'entrée
+        print("Données d'entrée reçues :", query.model_dump())
+
+        # Convertir les données d'entrée en une liste de listes
+        input_data_list = [[
+            query.EXT_SOURCE_2,
+            query.EXT_SOURCE_3,
+            query.PAYMENT_RATE,
+            query.INSTAL_DPD_MEAN,
+            query.INSTAL_AMT_PAYMENT_SUM,
+            query.AMT_ANNUITY,
+            query.DAYS_BIRTH,
+            query.CODE_GENDER,
+            query.ANNUITY_INCOME_PERC,
+            query.APPROVED_AMT_DOWN_PAYMENT_MAX,
+            query.DAYS_EMPLOYED_PERC,
+            query.BURO_DAYS_CREDIT_MEAN,
+            query.PREV_CNT_PAYMENT_MEAN,
+            query.AMT_GOODS_PRICE,
+            query.BURO_AMT_CREDIT_SUM_DEBT_MEAN,
+            query.ACTIVE_DAYS_CREDIT_MAX,
+            query.ACTIVE_DAYS_CREDIT_ENDDATE_MEAN,
+            query.PREV_APP_CREDIT_PERC_MEAN,
+            query.INSTAL_PAYMENT_PERC_MEAN,
+            query.NAME_EDUCATION_TYPE_Highereducation,
+            query.DAYS_ID_PUBLISH,
+            query.APPROVED_CNT_PAYMENT_MEAN,
+            query.BURO_DAYS_CREDIT_MAX,
+            query.INSTAL_AMT_PAYMENT_MIN,
+            query.INSTAL_DAYS_ENTRY_PAYMENT_SUM,
+            query.POS_MONTHS_BALANCE_SIZE,
+            query.PREV_NAME_CONTRACT_STATUS_Refused_MEAN,
+            query.DAYS_REGISTRATION,
+            query.PREV_APP_CREDIT_PERC_MIN,
+            query.APPROVED_DAYS_DECISION_MIN,
+            query.INSTAL_AMT_PAYMENT_MEAN,
+            query.INSTAL_DBD_SUM,
+            query.INSTAL_AMT_INSTALMENT_MAX,
+            query.INCOME_CREDIT_PERC,
+            query.INSTAL_DAYS_ENTRY_PAYMENT_MEAN,
+            query.INSTAL_PAYMENT_DIFF_MEAN
+        ]]
+        
+       # Convertir les données d'entrée en un DataFrame pandas
+        input_data_dict = query.model_dump()
+        input_data_df = pd.DataFrame([input_data_dict])
+
+        # Calculer les valeurs SHAP
+        explainer = shap.Explainer(model)
+        shap_values = explainer(input_data_df)
+        feature_names = shap_values.feature_names
+
+        # Convertir les valeurs SHAP en une liste de dictionnaires avec les noms des colonnes
+        shap_values_list = shap_values.values.tolist()
+        shap_values_with_names = [
+            {feature_names[i]: value for i, value in enumerate(shap_values_list[0])}
+        ]
+
+        return shap_values_with_names
+    except Exception as e:
+        # Log ou impression pour capturer l'exception
+        print("Erreur dans l'endpoint /shap_by_input :", str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.post("/predict")
 async def predict(query: QueryData):
     try:
