@@ -167,7 +167,12 @@ async def predict(query: QueryData):
 
         # Faire une prédiction avec le modèle
         prediction = model.predict(input_data)
-        return {"prediction": prediction.tolist()}
+        probabilities = model.predict_proba(input_data)
+
+        return {
+            "prediction": prediction.tolist(),
+            "probabilities": probabilities.tolist()
+        }
     except Exception as e:
         # Log the full traceback for debugging
         traceback.print_exc()

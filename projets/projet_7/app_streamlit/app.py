@@ -80,7 +80,18 @@ if st.button("Lancer la prédiction"):
                 updated_user_data[col] = cols[i % 3].text_input(col, user_data[col], key=f"{col}_{i}_pred")
 
     prediction = predict(updated_user_data.to_dict())
-    st.write(f"Prédiction: {int(prediction['prediction'][0])}")
+    # Affichage de la prédiction
+    prediction_class = prediction['prediction'][0]
+    prediction_label = "crédit refusé" if prediction_class == 0 else "crédit validé"
+    probabilities = prediction['probabilities'][0]
+    probability_0_percent = round(probabilities[0] * 100, 2)
+    probability_1_percent = round(probabilities[1] * 100, 2)
+    
+    if prediction_class == 0:
+        st.markdown(f'La décision de crédit est : <span style="color:red;">{prediction_label}</span> (probabilité : {probability_0_percent}%)', unsafe_allow_html=True)
+    else:
+        st.markdown(f'La décision de crédit est : <span style="color:green;">{prediction_label}</span> (probabilité : {probability_1_percent}%)', unsafe_allow_html=True)
+
 
 # Affichage des données SHAP
 st.subheader("Importance des variables client (SHAP)")

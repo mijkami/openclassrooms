@@ -118,4 +118,6 @@ def test_predict():
     }
     response = client.post("/predict", json=query_data)
     assert response.status_code == 200
-    assert "prediction" in response.json()
+    response_data = response.json()
+    assert "prediction" in response_data
+    assert "probabilities" in response_data
