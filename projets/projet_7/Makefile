@@ -11,4 +11,3 @@ run:
 rebuild:
 	make stop
 	make compose
-	make run
