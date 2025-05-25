@@ -62,13 +62,20 @@ if data is not None:
 # Interface utilisateur
 st.title("Dashboard Client")
 
+# Initialiser l'état de la session
+if 'current_sk_id_curr' not in st.session_state:
+    st.session_state.current_sk_id_curr = None
+    st.session_state.prediction_done = False
+    st.session_state.shap_by_input_data = None
+
 # Sélection de l'utilisateur
 sk_id_curr = st.selectbox("Sélectionnez un ID client", df["SK_ID_CURR"].unique())
 
 # Réinitialiser l'état de la session si l'ID client change
-if 'current_sk_id_curr' not in st.session_state or st.session_state.current_sk_id_curr != sk_id_curr:
+if st.session_state.current_sk_id_curr != sk_id_curr:
     st.session_state.current_sk_id_curr = sk_id_curr
     st.session_state.prediction_done = False
+    st.session_state.shap_by_input_data = None
 
 # Chargement des données de l'utilisateur sélectionné
 user_data = df[df["SK_ID_CURR"] == sk_id_curr].iloc[0]
@@ -98,7 +105,7 @@ if st.button("Lancer la prédiction"):
                 updated_user_data[col] = cols[i % 3].text_input(col, user_data[col], key=f"{col}_{i}_pred")
 
     prediction = predict(updated_user_data.to_dict())
-    # Affichage de la prédiction
+    # Affichage de la prédiction initiale du modèle
     prediction_class = prediction['prediction'][0]
     prediction_label = "crédit refusé" if prediction_class == 0 else "crédit validé"
     probabilities = prediction['probabilities'][0]
@@ -106,9 +113,19 @@ if st.button("Lancer la prédiction"):
     probability_1_percent = round(probabilities[1] * 100, 2)
 
     if prediction_class == 0:
-        st.markdown(f'La décision de crédit est : <span style="color:red;">{prediction_label}</span> (probabilité : {probability_0_percent}%)', unsafe_allow_html=True)
+        st.markdown(f'Décision initiale du modèle : <span style="color:red;">{prediction_label}</span> (probabilité : {probability_0_percent}%)', unsafe_allow_html=True)
     else:
-        st.markdown(f'La décision de crédit est : <span style="color:green;">{prediction_label}</span> (probabilité : {probability_1_percent}%)', unsafe_allow_html=True)
+        st.markdown(f'Décision initiale du modèle : <span style="color:green;">{prediction_label}</span> (probabilité : {probability_1_percent}%)', unsafe_allow_html=True)
+
+    # Affichage des informations sur le score métier
+    binary_prediction = prediction['binary_predictions'][0]
+    optimal_threshold = prediction['optimal_threshold']
+    optimal_threshold_percent = round(optimal_threshold * 100, 2)
+
+    binary_prediction_label = "crédit refusé" if binary_prediction == 0 else "crédit validé"
+    color = "red" if binary_prediction == 0 else "green"
+    st.markdown(f"Décision finale de crédit : <span style='color:{color};'>{binary_prediction_label}</span> (seuil optimal : {optimal_threshold_percent}%)", unsafe_allow_html=True)
+ 
 
     # Stocker l'état de la prédiction
     st.session_state.prediction_done = True
@@ -120,10 +137,10 @@ if st.button("Lancer la prédiction"):
             st.session_state.shap_by_input_data = shap_by_input_data
 
 # Affichage des données SHAP et des distributions des variables uniquement après la prédiction
-if 'prediction_done' in st.session_state and st.session_state.prediction_done:
+if st.session_state.prediction_done:
     # Affichage des données SHAP
     st.subheader("Importance des variables client (SHAP)")
-    if show_fields and 'shap_by_input_data' in st.session_state:
+    if show_fields and st.session_state.shap_by_input_data is not None:
         shap_data = st.session_state.shap_by_input_data
     else:
         shap_data = fetch_shap_data(sk_id_curr)
@@ -145,7 +162,7 @@ if 'prediction_done' in st.session_state and st.session_state.prediction_done:
         st.pyplot(fig)
 
         # Ajouter un toggle pour afficher ou cacher l'intégralité du SHAP
-        show_full_shap = st.checkbox("Afficher l'intégralité du SHAP")
+        show_full_shap = st.checkbox("Afficher l'intégralité du SHAP", key="show_full_shap")
 
         if show_full_shap:
             # Assurez-vous que les dimensions des matrices shap_values et user_data correspondent
@@ -154,7 +171,6 @@ if 'prediction_done' in st.session_state and st.session_state.prediction_done:
             shap.summary_plot(shap_values, user_data_df, plot_type="bar")
             st.pyplot(plt.gcf())
             plt.close()
-
 
         # Trier les variables par importance SHAP
         shap_importance = pd.Series(shap_values[0], index=feature_names).abs().sort_values(ascending=False)
@@ -169,13 +185,13 @@ if 'prediction_done' in st.session_state and st.session_state.prediction_done:
     st.subheader("Positionnement du client par variable")
 
     # Ajouter un bouton pour basculer entre les modes
-    simple_mode = st.checkbox("Mode manuel", value=True)
+    simple_mode = st.checkbox("Mode manuel", value=True, key="simple_mode")
 
     if simple_mode:
         # Menu de sélection pour choisir les variables à afficher
         selected_vars = st.multiselect("Sélectionnez les variables à afficher",
                                       options=top_variables,
-                                      default=top_variables[:4])
+                                      default=top_variables[:4], key="selected_vars")
     else:
         # Initialiser display_mode dans st.session_state s'il n'existe pas
         if 'display_mode' not in st.session_state:
@@ -184,16 +200,16 @@ if 'prediction_done' in st.session_state and st.session_state.prediction_done:
         # Ajouter un slider pour choisir le nombre de variables à afficher
         min_value_slider=4
         max_n_variables = len(top_variables) if 'top_variables' in locals() else min_value_slider
-        n_variables = st.slider("Nombre de variables à afficher", min_value=min_value_slider, max_value=max_n_variables, value=min_value_slider)
+        n_variables = st.slider("Nombre de variables à afficher", min_value=min_value_slider, max_value=max_n_variables, value=min_value_slider, key="n_variables")
 
         # Utiliser des colonnes pour afficher les boutons horizontalement
         button_cols = st.columns(2)
         with button_cols[0]:
-            if st.button("Afficher les variables éloignées de la médiane"):
+            if st.button("Afficher les variables éloignées de la médiane", key="far_from_median_button"):
                 st.session_state.display_mode = "far_from_median"
 
         with button_cols[1]:
-            if st.button("Afficher le top SHAP"):
+            if st.button("Afficher le top SHAP", key="top_shap_button"):
                 st.session_state.display_mode = "top_shap"
 
         # Afficher le mode d'affichage actuel
@@ -218,3 +234,5 @@ if 'prediction_done' in st.session_state and st.session_state.prediction_done:
         ax.set_title(f"Distribution de {var}")  # Ajouter un titre à chaque graphique
         dist_cols[i % 2].pyplot(fig)
         plt.close(fig)  # Fermer la figure après utilisation
+
+

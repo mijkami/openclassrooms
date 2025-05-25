@@ -6,6 +6,10 @@ import shap
 from pydantic import BaseModel
 from typing import List
 import traceback
+try:
+    from .config import optimal_threshold
+except ImportError:
+    from config import optimal_threshold
 
 # Charger les variables d'environnement
 MODEL_PATH = os.getenv('MODEL_PATH', 'app/model.pkl')
@@ -237,9 +241,14 @@ async def predict(query: QueryData):
         prediction = model.predict(input_data)
         probabilities = model.predict_proba(input_data)
 
+        # Appliquer le seuil optimal
+        binary_predictions = (probabilities[:, 1] >= optimal_threshold).astype(int)
+
         return {
             "prediction": prediction.tolist(),
-            "probabilities": probabilities.tolist()
+            "probabilities": probabilities.tolist(),
+            "binary_predictions": binary_predictions.tolist(),
+            "optimal_threshold": optimal_threshold
         }
     except Exception as e:
         # Log the full traceback for debugging

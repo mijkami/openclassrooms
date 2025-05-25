@@ -227,4 +227,16 @@ def test_predict_response_structure():
         assert isinstance(prob, float)
         assert 0 <= prob <= 1  # Vérifie que les probabilités sont entre 0 et 1
 
+    # Vérifiez que "binary_predictions" est une liste contenant un entier
+    assert isinstance(response_data["binary_predictions"], list)
+    assert len(response_data["binary_predictions"]) == 1
+    assert isinstance(response_data["binary_predictions"][0], int)
+
+    # Vérifiez que l'entier dans "binary_predictions" est soit 0, soit 1
+    assert response_data["binary_predictions"][0] in [0, 1]
+
+    # Vérifiez que "optimal_threshold" est un flottant entre 0 et 1
+    assert isinstance(response_data["optimal_threshold"], float)
+    assert 0 <= response_data["optimal_threshold"] <= 1
+
 
