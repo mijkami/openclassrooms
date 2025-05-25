@@ -1,3 +1,6 @@
 [submodule "projets/projet_7/app_API"]
 	path = projets/projet_7/app_API
 	url = git@github.com:mijkami/oc_p7_app_api.git
+[submodule "projets/projet_7/app_streamlit"]
+	path = projets/projet_7/app_streamlit
+	url = git@github.com:mijkami/oc_p7_app_streamlit.git
