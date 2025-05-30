@@ -1,0 +1,2 @@
+# run mlflow
+mlflow ui
