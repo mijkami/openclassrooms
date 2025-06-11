@@ -7,3 +7,5 @@ __pycache__/
 
 /projets/projet_4/map*
 */credentials.py
+
+artifacts/
