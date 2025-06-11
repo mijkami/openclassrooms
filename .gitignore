@@ -9,3 +9,6 @@ __pycache__/
 */credentials.py
 
 artifacts/
+
+/projets/projet_8/P8_aws_key.pem
+/projets/projet_8/.env
