@@ -1,12 +1,43 @@
 # étapes installation projet
 
 # installation prérequis
-
+# java
 sudo pacman -S jdk17-openjdk
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 java -version
 echo $JAVA_HOME
+
+# aws-cli
 sudo pacman -S aws-cli
+aws configure
+
+> https://us-east-1.console.aws.amazon.com/iam/home?region=eu-west-3#/users
+> aller dans P8_userclient
+> Security Credentials
+> Access keys /create acces key
+
+> aws s3api s3://p8-data-dgdev
+
+aws s3 mb s3://p8-data-dgdev
+aws s3 ls
+cd data/Test1
+aws s3 sync . s3://p8-data-dgdev/Test
+
+> upload bootstrap
+
+aws s3 cp bootstrap-emr.sh s3://p8-data-dgdev/
+
+> upload .pem
+
+aws s3 cp "P8_aws_key.pem" "s3://p8-data-dgdev/certificates/P8_AWS_key.pem"
+
+
+# création user client
+sudo useradd -m P8_userclient
+sudo passwd P8_userclient
+# 1234
+
+
 
 
 # activation instance EC2 sur AWS
