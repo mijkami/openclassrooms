@@ -29,13 +29,11 @@ aws s3 cp bootstrap-emr.sh s3://p8-data-dgdev/
 
 > upload .pem
 
-aws s3 cp "P8_aws_key.pem" "s3://p8-data-dgdev/certificates/P8_AWS_key.pem"
+zip "P8_aws_key.zip"  "P8_aws_key.pem"
+
+aws s3 cp "P8_aws_key.zip" "s3://p8-data-dgdev/certificates/P8_AWS_key.zip"
 
 
-# création user client
-sudo useradd -m P8_userclient
-sudo passwd P8_userclient
-# 1234
 
 
 
@@ -47,3 +45,17 @@ sudo passwd P8_userclient
 # connection SSH avec fichier .pem
 chmod 600 P8_aws_key.pem
 make aws_connect
+
+
+# cluster EC2 Software Settings JSON
+[
+  {
+    "Classification": "jupyter-s3-conf",
+    "Properties": {
+      "s3.persistence.enabled": "true",
+      "s3.persistence.bucket": "p8-data-dgdev"
+    }
+  }
+]
+
+

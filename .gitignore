@@ -12,3 +12,7 @@ artifacts/
 
 /projets/projet_8/P8_aws_key.pem
 /projets/projet_8/.env
+/projets/projet_8/test_key
+*.pem
+*.zip
+/projets/projet_8/P8_aws_key.zip
