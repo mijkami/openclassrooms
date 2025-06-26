@@ -2,6 +2,9 @@
 
 # local linux (/!\ current distro : archlinux, check other package managers)
 ## java
+> create your P8_kernel to contain the packages installed for the project
+> link P8_kernel to jupyter to be able to select it
+
 sudo pacman -S jdk17-openjdk
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 java -version
@@ -54,7 +57,7 @@ sudo python3 -m pip install rich
 sudo python3 -m pip install dm-tree
 
 ### upload bootstrap
-aws s3 cp bootstrap-emr.sh s3://p8-data-dgdev/
+aws s3 cp bootstrap-emr.sh s3://p8-data-dgdev/bootstrap-emr.sh
 
 
 # activation instance EC2 sur AWS
