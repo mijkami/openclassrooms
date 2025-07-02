@@ -1,12 +1,14 @@
 # étapes installation projet
 
 # docs :
+https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html
+
+https://alysivji.github.io/setting-up-pyenv-virtualenvwrapper.html
 https://docs.aws.amazon.com/
 https://awsforengineers.com/blog/aws-ec2-and-s3-for-beginners/
 https://repost.aws/
 https://docs.aws.amazon.com/fr_fr/AWSEC2/latest/UserGuide/AmazonS3.html
 https://jupyter-enterprise-gateway.readthedocs.io/en/v2.6.0/
-https://alysivji.github.io/setting-up-pyenv-virtualenvwrapper.html
 https://www.youtube.com/playlist?list=PL7iMyoQPMtAN4xl6oWzafqJebfay7K8KP (AWS Course)
 
 
