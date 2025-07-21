@@ -17,6 +17,7 @@ Prérequis :
 
 ## le signe dollar $ indique un début de ligne / nouvelle ligne de code à exécuter
 
+
 $ pyvenv versions #vérifier les env installés
 $ pyenv virtualenv 3.9.7 data_p4
 $ pyenv local data_p4
@@ -36,7 +37,11 @@ $ mkvirtualenv --python /home/mijka/.pyenv/versions/3.9.7/bin/python p5
 $ which python
 $ ipython kernel install --user --name=p5
 
-# usage
+# gestion kernel /!\
+
+$ workon p5
+$ pip install --upgrade ipykernel
+$ python -m ipykernel install --user --name=p5 --display-name="p5"
 
 
 # other commands
@@ -44,3 +49,21 @@ $ ipython kernel install --user --name=p5
 $ deactivate
 $ workon p5
 $ rmvirtualenv p5
+
+
+$ pip list
+$ pip install -r requirements.txt
+$ pip freeze > requirements.txt
+
+# check environnement
+## dans jupyter
+
+import sys
+print(sys.executable)
+print(sys.path)
+
+
+## dans terminal
+
+$ pip --version
+$ !pip --version
